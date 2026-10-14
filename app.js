@@ -66,7 +66,6 @@ const OFFICIAL_GIFTS=[
   {name:'かわいい♡',coin:5,group:'文字系',variant:'pink'},
   {name:'天才かよ',coin:5,group:'文字系'},
   {name:'たしカニ',coin:5,group:'文字系'},
-  {name:'乙',coin:5,group:'文字系'},
 
   {name:'ハート',coin:5,group:'かわいい系'},
   {name:'おめでとう',coin:5,group:'かわいい系'},
@@ -97,6 +96,7 @@ const OFFICIAL_GIFTS=[
   {name:'ただいま～(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
   {name:'がんばれ(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
   {name:'Big Thanks(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
+  {name:'乙(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
 
   {name:'しょぼぼーん(ヨルワール)',coin:5,group:'Avvyケモず系',mascot:'ヨルワール'},
   {name:'ごゆっくり(ヨルワール)',coin:5,group:'Avvyケモず系',mascot:'ヨルワール'},
