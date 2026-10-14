@@ -1010,63 +1010,52 @@ function home(){
       </p>
     </div>
 
-    <div class="grid">
 
-      <div class="card">
-        <h3>🎁 ギフト</h3>
-        <div class="big">
-          ${total}
-        </div>
+<div class="grid home-feature-grid">
 
-        <p class="muted">
-          登録ギフトの合計カウント
-        </p>
+  <button type="button" class="card home-feature-card" data-jump="gift">
+    <h3>🎁 ギフト</h3>
+    <p class="muted">ギフト耐久を記録</p>
+    <span class="primary">ギフトを開く →</span>
+  </button>
 
-        <button
-          class="primary"
-          data-jump="gift"
-        >
-          ギフト耐久を開く
-        </button>
-      </div>
+  <button type="button" class="card home-feature-card" data-jump="entry">
+    <h3>🚪 入室耐久</h3>
+    <p class="muted">入室カウントを記録</p>
+    <span class="primary">入室耐久を開く →</span>
+  </button>
 
-      <div class="card">
-        <h3>📊 企画カウント</h3>
+  <button type="button" class="card home-feature-card" data-jump="pref">
+    <h3>📍 都道府県</h3>
+    <p class="muted">都道府県の耐久を記録</p>
+    <span class="primary">都道府県を開く →</span>
+  </button>
 
-        <div class="big">
-          ${selected}
-        </div>
+  <button type="button" class="card home-feature-card" data-jump="mbti">
+    <h3>🧠 MBTI</h3>
+    <p class="muted">MBTIの耐久を記録</p>
+    <span class="primary">MBTIを開く →</span>
+  </button>
 
-        <p class="muted">
-          星座・MBTI・都道府県など
-        </p>
+  <button type="button" class="card home-feature-card" data-jump="zodiac">
+    <h3>⭐ 星座</h3>
+    <p class="muted">星座の耐久を記録</p>
+    <span class="primary">星座を開く →</span>
+  </button>
 
-        <button
-          class="secondary"
-          data-jump="pref"
-        >
-          企画を開く
-        </button>
-      </div>
+  <button type="button" class="card home-feature-card" data-jump="origift">
+    <h3>🎨 オリギフ</h3>
+    <p class="muted">オリジナルギフトを記録</p>
+    <span class="primary">オリギフを開く →</span>
+  </button>
 
-      <div class="card">
-        <h3>✨ カスタム耐久</h3>
+  <button type="button" class="card home-feature-card home-feature-wide" data-jump="custom">
+    <h3>✨ カスタム</h3>
+    <p class="muted">自分だけの耐久を記録</p>
+    <span class="primary">カスタムを開く →</span>
+  </button>
 
-        <div class="big">
-          ${customTotal}
-        </div>
-
-        <p class="muted">
-          自分で作成した耐久の合計
-        </p>
-
-        <button
-          class="secondary"
-          data-jump="custom"
-        >
-          カスタムを開く
-        </button>
-      </div>
+</div>
 
     </div>
   `;
