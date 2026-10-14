@@ -352,13 +352,18 @@ async function ensureOfficialGifts(userId){
     variant:g.variant||null
   }));
 
+ 
   const {data:existingAll,error:existingError}=await sb
     .from('gift_definitions')
     .select('id,name,coin,source,event_key')
     .eq('user_id',userId);
+
   if(existingError)throw existingError;
 
-  const existingOfficial=(existingAll||[]).filter(g=>g.source==='official');
+  const existingOfficial=(existingAll||[]).filter(
+    g=>g.source==='official'
+  );
+
   const groups=new Map();
 
   for(const g of existingOfficial){
@@ -368,8 +373,10 @@ async function ensureOfficialGifts(userId){
   }
 
   const duplicateIds=[];
+
   for(const rows of groups.values()){
     if(rows.length<=1)continue;
+
     const keep=rows[0];
     const ids=rows.slice(1).map(x=>x.id);
 
@@ -378,9 +385,13 @@ async function ensureOfficialGifts(userId){
       .select('gift_id,count')
       .eq('user_id',state.user.id)
       .in('gift_id',[keep.id,...ids]);
+
     if(countError)throw countError;
 
-    const total=(counts||[]).reduce((sum,x)=>sum+Number(x.count||0),0);
+    const total=(counts||[]).reduce(
+      (sum,x)=>sum+Number(x.count||0),0
+    );
+
     if(total>0){
       const {error}=await sb.from('gift_counts').upsert({
         user_id:state.user.id,
@@ -388,33 +399,42 @@ async function ensureOfficialGifts(userId){
         count:total,
         updated_at:new Date().toISOString()
       },{onConflict:'user_id,gift_id'});
+
       if(error)throw error;
     }
 
     if(ids.length){
       const {error}=await sb.from('gift_counts').delete()
-        .eq('user_id',state.user.id).in('gift_id',ids);
+        .eq('user_id',state.user.id)
+        .in('gift_id',ids);
+
       if(error)throw error;
+
       duplicateIds.push(...ids);
     }
   }
 
   if(duplicateIds.length){
     const {error}=await sb.from('gift_definitions').delete()
-      .eq('user_id',userId).in('id',duplicateIds);
+      .eq('user_id',userId)
+      .in('id',duplicateIds);
+
     if(error)throw error;
   }
 
+  // 既存ギフトを再取得
   const {data:existing,error:reloadError}=await sb
     .from('gift_definitions')
     .select('id,name,coin,source,event_key')
     .eq('user_id',userId);
+
   if(reloadError)throw reloadError;
 
   const keySet=new Set((existing||[]).map(g=>
     `${g.source||'original'}|${g.event_key||''}|${g.name}|${g.coin}`
   ));
 
+  // 未登録のギフトだけ追加
   const missing=all.filter(g=>!keySet.has(
     `${g.source}|${g.event_key||''}|${g.name}|${g.coin}`
   ));
@@ -423,7 +443,54 @@ async function ensureOfficialGifts(userId){
     const {error}=await sb.from('gift_definitions').insert(missing);
     if(error)throw error;
   }
+
+  // 公式ギフトの分類を更新する
+  const {data:officialRows,error:officialError}=await sb
+    .from('gift_definitions')
+    .select('id,name,coin,group_name,mascot,variant')
+    .eq('user_id',userId)
+    .eq('source','official');
+
+  if(officialError)throw officialError;
+
+  const officialMap=new Map(
+    OFFICIAL_GIFTS.map(g=>[
+      `${g.name}|${g.coin}`,
+      g
+    ])
+  );
+
+  for(const row of officialRows||[]){
+    const definition=officialMap.get(
+      `${row.name}|${row.coin}`
+    );
+
+    if(!definition)continue;
+
+    const newGroup=definition.group||null;
+    const newMascot=definition.mascot||null;
+    const newVariant=definition.variant||null;
+
+    if(
+      row.group_name===newGroup&&
+      row.mascot===newMascot&&
+      row.variant===newVariant
+    )continue;
+
+    const {error}=await sb
+      .from('gift_definitions')
+      .update({
+        group_name:newGroup,
+        mascot:newMascot,
+        variant:newVariant
+      })
+      .eq('id',row.id)
+      .eq('user_id',userId);
+
+    if(error)throw error;
+  }
 }
+
 
 let loadPromise=null;
 
@@ -1285,12 +1352,12 @@ function giftOfficialGroup(coin){
   const summary=
     giftTypeSummary(gs);
 
-  if(coin===5){
-    const groups=[
-      '文字系',
-      'かわいい系',
-      'Avvyケモず系'
-    ];
+ if(coin===5){
+  const groups=[
+    '文字系',
+    'アイテム系',
+    'Avvyケモず系'
+  ];
 
     return `
       <div class="coin-group">
