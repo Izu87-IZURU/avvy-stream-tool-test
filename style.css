@@ -25,3 +25,69 @@ html[data-theme="light"] body, body.light-mode {
 .target-summary{margin:4px 0 12px}.target-main{display:flex;align-items:baseline;gap:12px;margin-bottom:7px}.target-main strong{font-size:24px}.target-main span{font-size:13px;color:var(--muted)}.target-summary .progress{height:10px}.event-coin{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
 
 .summary-label{font-size:12px;color:var(--muted);margin-top:4px}.complete-badge{margin-top:8px;font-weight:700}.target-summary{margin:12px 0 16px}.target-main{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.target-main strong{font-size:20px}.target-main span{font-size:13px;color:var(--muted)}
+
+/* ホーム画面の機能カード */
+.home-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.home-feature-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  text-align: left;
+  color: var(--text);
+  background: var(--surface);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.home-feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.home-feature-card h3 {
+  font-size: 17px;
+  margin: 0;
+}
+
+.home-feature-card .muted {
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+
+.home-feature-card .primary {
+  display: inline-block;
+  margin-top: auto;
+  font-size: 13px;
+}
+
+.home-feature-wide {
+  grid-column: 1 / -1;
+}
+
+/* スマホでも2列表示 */
+@media (max-width: 700px) {
+  .home-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .home-feature-card {
+    padding: 14px;
+  }
+
+  .home-feature-card h3 {
+    font-size: 15px;
+  }
+
+  .home-feature-card .primary {
+    padding: 9px 10px;
+    font-size: 12px;
+  }
+}
