@@ -44,6 +44,7 @@ const ZODIAC=[
 ];
 
 const OFFICIAL_GIFTS=[
+  // 5C：文字系
   {name:'ええやん',coin:5,group:'文字系'},
   {name:'かわいい',coin:5,group:'文字系',variant:'blue'},
   {name:'GOD',coin:5,group:'文字系'},
@@ -67,17 +68,19 @@ const OFFICIAL_GIFTS=[
   {name:'天才かよ',coin:5,group:'文字系'},
   {name:'たしカニ',coin:5,group:'文字系'},
 
-  {name:'ハート',coin:5,group:'かわいい系'},
-  {name:'おめでとう',coin:5,group:'かわいい系'},
-  {name:'花束',coin:5,group:'かわいい系'},
-  {name:'ペンライト(3本)',coin:5,group:'かわいい系'},
-  {name:'ペンライト',coin:5,group:'かわいい系'},
-  {name:'プレゼントボックス',coin:5,group:'かわいい系'},
-  {name:'クリームソーダ',coin:5,group:'かわいい系'},
-  {name:'音符',coin:5,group:'かわいい系'},
-  {name:'バラ',coin:5,group:'かわいい系'},
-  {name:'つぼみのバラ',coin:5,group:'かわいい系'},
+  // 5C：アイテム系
+  {name:'ハート',coin:5,group:'アイテム系'},
+  {name:'おめでとう',coin:5,group:'アイテム系'},
+  {name:'花束',coin:5,group:'アイテム系'},
+  {name:'ペンライト(3本)',coin:5,group:'アイテム系'},
+  {name:'ペンライト',coin:5,group:'アイテム系'},
+  {name:'プレゼントボックス',coin:5,group:'アイテム系'},
+  {name:'クリームソーダ',coin:5,group:'アイテム系'},
+  {name:'音符',coin:5,group:'アイテム系'},
+  {name:'バラ',coin:5,group:'アイテム系'},
+  {name:'つぼみのバラ',coin:5,group:'アイテム系'},
 
+  // 5C：Avvyケモず系（アヴィエル）
   {name:'パチパチ(アヴィエル)',coin:5,group:'Avvyケモず系',mascot:'アヴィエル'},
   {name:'おなかすいた(アヴィエル)',coin:5,group:'Avvyケモず系',mascot:'アヴィエル'},
   {name:'ごろ寝(アヴィエル)',coin:5,group:'Avvyケモず系',mascot:'アヴィエル'},
@@ -85,12 +88,14 @@ const OFFICIAL_GIFTS=[
   {name:'もぐもぐ(アヴィエル)',coin:5,group:'Avvyケモず系',mascot:'アヴィエル'},
   {name:'わかる(アヴィエル)',coin:5,group:'Avvyケモず系',mascot:'アヴィエル'},
 
+  // 5C：Avvyケモず系（でんきゅいぬ）
   {name:'ショック！(でんきゅいぬ)',coin:5,group:'Avvyケモず系',mascot:'でんきゅいぬ'},
   {name:'嬉しい！(でんきゅいぬ)',coin:5,group:'Avvyケモず系',mascot:'でんきゅいぬ'},
   {name:'いいね(でんきゅいぬ)',coin:5,group:'Avvyケモず系',mascot:'でんきゅいぬ'},
   {name:'充電中(でんきゅいぬ)',coin:5,group:'Avvyケモず系',mascot:'でんきゅいぬ'},
   {name:'おはよう！(でんきゅいぬ)',coin:5,group:'Avvyケモず系',mascot:'でんきゅいぬ'},
 
+  // 5C：Avvyケモず系（げるくま）
   {name:'カチコチ(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
   {name:'溶けちゃう(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
   {name:'ただいま～(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
@@ -98,24 +103,27 @@ const OFFICIAL_GIFTS=[
   {name:'Big Thanks(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
   {name:'乙(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
 
+  // 5C：Avvyケモず系（ヨルワール）
   {name:'しょぼぼーん(ヨルワール)',coin:5,group:'Avvyケモず系',mascot:'ヨルワール'},
   {name:'ごゆっくり(ヨルワール)',coin:5,group:'Avvyケモず系',mascot:'ヨルワール'},
   {name:'お大事に(ヨルワール)',coin:5,group:'Avvyケモず系',mascot:'ヨルワール'},
   {name:'いいね(ヨルワール)',coin:5,group:'Avvyケモず系',mascot:'ヨルワール'},
   {name:'おやすみ(ヨルワール)',coin:5,group:'Avvyケモず系',mascot:'ヨルワール'},
 
+  // 5C：Avvyケモず系（クロル）
   {name:'照れ照れ(クロル)',coin:5,group:'Avvyケモず系',mascot:'クロル'},
   {name:'かまって(クロル)',coin:5,group:'Avvyケモず系',mascot:'クロル'},
   {name:'ありがとう(クロル)',coin:5,group:'Avvyケモず系',mascot:'クロル'},
   {name:'またね(クロル)',coin:5,group:'Avvyケモず系',mascot:'クロル'},
 
+  // 5C：Avvyケモず系（ウパめろ）
   {name:'推し(ウパめろ)',coin:5,group:'Avvyケモず系',mascot:'ウパめろ'},
   {name:'たすかる(ウパめろ)',coin:5,group:'Avvyケモず系',mascot:'ウパめろ'},
   {name:'たましい(ウパめろ)',coin:5,group:'Avvyケモず系',mascot:'ウパめろ'},
   {name:'メラメラ(ウパめろ)',coin:5,group:'Avvyケモず系',mascot:'ウパめろ'},
   {name:'心配(ウパめろ)',coin:5,group:'Avvyケモず系',mascot:'ウパめろ'},
-  {name:'おかえり(ウパめろ)',coin:5,group:'Avvyケモず系',mascot:'ウパめろ'},
-
+  {name:'おかえり(ウパめろ)',coin:5,group:'Avvyケモず系',mascot:'ウパめろ'}
+];
   {name:'お茶',coin:50},
   {name:'アイスクリーム',coin:50},
   {name:'ミニケーキ',coin:50},
