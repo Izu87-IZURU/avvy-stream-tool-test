@@ -336,15 +336,15 @@ async function loadCustomItems(){
 async function ensureOfficialGifts(userId){
   const all=[
     ...OFFICIAL_GIFTS.map((g,i)=>({
-      ...g, source:'official', event_key:null, sort_order:i
+      ...g,source:'official',event_key:null,sort_order:i
     })),
     ...Object.entries(EVENT_GIFTS).flatMap(([event,gs])=>
       gs.map((g,i)=>({
-        ...g, source:'event', event_key:event, sort_order:i
+        ...g,source:'event',event_key:event,sort_order:i
       }))
     ),
     ...SEASON_GIFTS.map((g,i)=>({
-      ...g, source:'season', event_key:null, sort_order:i
+      ...g,source:'season',event_key:null,sort_order:i
     }))
   ].map(g=>({
     user_id:userId,
@@ -360,222 +360,123 @@ async function ensureOfficialGifts(userId){
     variant:g.variant||null
   }));
 
- 
-  const {data:existingAll,error:existingError}=await sb
+  // まず登録済みのギフトを取得する
+  const {data:initialRows,error:initialError}=await sb
     .from('gift_definitions')
     .select('id,name,coin,source,event_key')
     .eq('user_id',userId);
+  if(initialError)throw initialError;
 
-  if(existingError)throw existingError;
-
-  const existingOfficial=(existingAll||[]).filter(
-    g=>g.source==='official'
-  );
-
-  const groups=new Map();
-
-  for(const g of existingOfficial){
-    const key=`${g.name}|${g.coin}`;
-    if(!groups.has(key))groups.set(key,[]);
-    groups.get(key).push(g);
-  }
-
-  const duplicateIds=[];
-
-  for(const rows of groups.values()){
-    if(rows.length<=1)continue;
-
-    const keep=rows[0];
-    const ids=rows.slice(1).map(x=>x.id);
-
-    const {data:counts,error:countError}=await sb
-      .from('gift_counts')
-      .select('gift_id,count')
-      .eq('user_id',userId)
-      .in('gift_id',[keep.id,...ids]);
-
-    if(countError)throw countError;
-
-    const total=(counts||[]).reduce(
-      (sum,x)=>sum+Number(x.count||0),0
-    );
-
-    if(total>0){
-      const {error}=await sb.from('gift_counts').upsert({
-        user_id:userId,
-        gift_id:keep.id,
-        count:total,
-        updated_at:new Date().toISOString()
-      },{onConflict:'user_id,gift_id'});
-
-      if(error)throw error;
-    }
-
-    if(ids.length){
-      const {error}=await sb.from('gift_counts').delete()
-        .eq('user_id',userId)
-        .in('gift_id',ids);
-
-      if(error)throw error;
-
-      duplicateIds.push(...ids);
-    }
-  }
-
-  if(duplicateIds.length){
-    const {error}=await sb.from('gift_definitions').delete()
-      .eq('user_id',userId)
-      .in('id',duplicateIds);
-
-    if(error)throw error;
-  }
-
-  // 既存ギフトを再取得
-  const {data:existing,error:reloadError}=await sb
-    .from('gift_definitions')
-    .select('id,name,coin,source,event_key')
-    .eq('user_id',userId);
-
-  if(reloadError)throw reloadError;
-
-  const keySet=new Set((existing||[]).map(g=>
-    `${g.source||'original'}|${g.event_key||''}|${g.name}|${g.coin}`
-  ));
-
-  // 未登録のギフトだけ追加
-  const missing=all.filter(g=>!keySet.has(
-    `${g.source}|${g.event_key||''}|${g.name}|${g.coin}`
-  ));
+  const keyOf=g=>`${g.source||'original'}|${g.event_key||''}|${g.name}|${g.coin}`;
+  const existingKeys=new Set((initialRows||[]).map(keyOf));
+  const missing=all.filter(g=>!existingKeys.has(keyOf(g)));
 
   if(missing.length){
     const {error}=await sb.from('gift_definitions').insert(missing);
     if(error)throw error;
   }
 
-  // 旧名称の公式ギフトを現在の名称へ統合する
-  // 旧名称が残っていると、同じギフトが重複したり分類から漏れたりするため、
-  // カウントを新名称のギフトへ移してから旧行を削除する。
-  const officialAliases=[
-    {oldName:'乙',newName:'乙(げるくま)',coin:5},
-    {oldName:'頑張れ(げるくま)',newName:'がんばれ(げるくま)',coin:5}
-  ];
+  // 旧名称を正式名称に統合する。カウントは正式名称側へ合算する。
+  const aliases={
+    '乙':'乙(げるくま)',
+    '頑張れ(げるくま)':'がんばれ(げるくま)'
+  };
 
-  for(const alias of officialAliases){
-    const {data:oldRows,error:oldError}=await sb
-      .from('gift_definitions')
-      .select('id,name,coin')
+  const {data:allRows,error:allRowsError}=await sb
+    .from('gift_definitions')
+    .select('id,name,coin,source,event_key,group_name,mascot,variant')
+    .eq('user_id',userId);
+  if(allRowsError)throw allRowsError;
+
+  const officialKeys=new Set(OFFICIAL_GIFTS.map(g=>`${g.name}|${g.coin}`));
+  const normalizedKey=g=>{
+    let name=g.name;
+    if(g.source==='official' && Object.prototype.hasOwnProperty.call(aliases,name)){
+      const target=aliases[name];
+      if(officialKeys.has(`${target}|${g.coin}`))name=target;
+    }
+    return `${g.source||'original'}|${g.event_key||''}|${name}|${g.coin}`;
+  };
+
+  const groups=new Map();
+  for(const row of allRows||[]){
+    const key=normalizedKey(row);
+    if(!groups.has(key))groups.set(key,[]);
+    groups.get(key).push(row);
+  }
+
+  for(const [key,rows] of groups.entries()){
+    if(rows.length<=1)continue;
+
+    // 正式名称の行を優先して残す
+    const parts=key.split('|');
+    const canonicalName=parts[2];
+    const keep=rows.find(row=>row.name===canonicalName)||rows[0];
+    const removeRows=rows.filter(row=>row.id!==keep.id);
+    const ids=rows.map(row=>row.id);
+
+    const {data:counts,error:countsError}=await sb
+      .from('gift_counts')
+      .select('gift_id,count')
       .eq('user_id',userId)
-      .eq('source','official')
-      .eq('name',alias.oldName)
-      .eq('coin',alias.coin);
+      .in('gift_id',ids);
+    if(countsError)throw countsError;
 
-    if(oldError)throw oldError;
-    if(!oldRows?.length)continue;
+    const total=(counts||[]).reduce((sum,row)=>sum+Number(row.count||0),0);
 
-    const {data:newRows,error:newError}=await sb
-      .from('gift_definitions')
-      .select('id,name,coin')
+    const {error:deleteCountsError}=await sb
+      .from('gift_counts')
+      .delete()
       .eq('user_id',userId)
-      .eq('source','official')
-      .eq('name',alias.newName)
-      .eq('coin',alias.coin);
+      .in('gift_id',ids);
+    if(deleteCountsError)throw deleteCountsError;
 
-    if(newError)throw newError;
+    if(total>0){
+      const {error:upsertError}=await sb.from('gift_counts').upsert({
+        user_id:userId,
+        gift_id:keep.id,
+        count:total,
+        updated_at:new Date().toISOString()
+      },{onConflict:'user_id,gift_id'});
+      if(upsertError)throw upsertError;
+    }
 
-    // 現行の正式名称が存在する場合のみ統合する
-    const target=newRows?.[0];
-    if(!target)continue;
-
-    for(const oldRow of oldRows){
-      const {data:oldCounts,error:oldCountError}=await sb
-        .from('gift_counts')
-        .select('count')
+    if(removeRows.length){
+      const {error:deleteDefinitionsError}=await sb
+        .from('gift_definitions')
+        .delete()
         .eq('user_id',userId)
-        .eq('gift_id',oldRow.id);
-
-      if(oldCountError)throw oldCountError;
-
-      const {data:targetCounts,error:targetCountError}=await sb
-        .from('gift_counts')
-        .select('count')
-        .eq('user_id',userId)
-        .eq('gift_id',target.id);
-
-      if(targetCountError)throw targetCountError;
-
-      const oldTotal=(oldCounts||[]).reduce((sum,row)=>sum+Number(row.count||0),0);
-      const targetTotal=(targetCounts||[]).reduce((sum,row)=>sum+Number(row.count||0),0);
-      const mergedTotal=oldTotal+targetTotal;
-
-      if(mergedTotal>0){
-        const {error:upsertError}=await sb.from('gift_counts').upsert({
-          user_id:userId,
-          gift_id:target.id,
-          count:mergedTotal,
-          updated_at:new Date().toISOString()
-        },{onConflict:'user_id,gift_id'});
-        if(upsertError)throw upsertError;
-      }
-
-      const {error:deleteCountError}=await sb.from('gift_counts').delete()
-        .eq('user_id',userId)
-        .eq('gift_id',oldRow.id);
-      if(deleteCountError)throw deleteCountError;
-
-      const {error:deleteGiftError}=await sb.from('gift_definitions').delete()
-        .eq('user_id',userId)
-        .eq('id',oldRow.id);
-      if(deleteGiftError)throw deleteGiftError;
+        .in('id',removeRows.map(row=>row.id));
+      if(deleteDefinitionsError)throw deleteDefinitionsError;
     }
   }
 
-  // 公式ギフトの分類を更新する
+  // 公式ギフトの分類を最新定義に合わせる
   const {data:officialRows,error:officialError}=await sb
     .from('gift_definitions')
     .select('id,name,coin,group_name,mascot,variant')
     .eq('user_id',userId)
     .eq('source','official');
-
   if(officialError)throw officialError;
 
-  const officialMap=new Map(
-    OFFICIAL_GIFTS.map(g=>[
-      `${g.name}|${g.coin}`,
-      g
-    ])
-  );
-
+  const officialMap=new Map(OFFICIAL_GIFTS.map(g=>[`${g.name}|${g.coin}`,g]));
   for(const row of officialRows||[]){
-    const definition=officialMap.get(
-      `${row.name}|${row.coin}`
-    );
-
+    const definition=officialMap.get(`${row.name}|${row.coin}`);
     if(!definition)continue;
 
     const newGroup=definition.group||null;
     const newMascot=definition.mascot||null;
     const newVariant=definition.variant||null;
+    if(row.group_name===newGroup&&row.mascot===newMascot&&row.variant===newVariant)continue;
 
-    if(
-      row.group_name===newGroup&&
-      row.mascot===newMascot&&
-      row.variant===newVariant
-    )continue;
-
-    const {error}=await sb
-      .from('gift_definitions')
-      .update({
-        group_name:newGroup,
-        mascot:newMascot,
-        variant:newVariant
-      })
-      .eq('id',row.id)
-      .eq('user_id',userId);
-
+    const {error}=await sb.from('gift_definitions').update({
+      group_name:newGroup,
+      mascot:newMascot,
+      variant:newVariant
+    }).eq('id',row.id).eq('user_id',userId);
     if(error)throw error;
   }
 }
-
 
 let loadPromise=null;
 
@@ -4457,7 +4358,7 @@ function bind(){
           .delete()
           .eq(
             'user_id',
-            state.user.id
+            state.appUserId
           )
           .in(
             'gift_id',
