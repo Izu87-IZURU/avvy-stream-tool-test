@@ -95,7 +95,7 @@ const OFFICIAL_GIFTS=[
   {name:'カチコチ(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
   {name:'溶けちゃう(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
   {name:'ただいま～(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
-  {name:'頑張れ(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
+  {name:'がんばれ(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
   {name:'Big Thanks(げるくま)',coin:5,group:'Avvyケモず系',mascot:'げるくま'},
 
   {name:'しょぼぼーん(ヨルワール)',coin:5,group:'Avvyケモず系',mascot:'ヨルワール'},
