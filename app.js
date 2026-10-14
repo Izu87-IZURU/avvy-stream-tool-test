@@ -452,6 +452,83 @@ async function ensureOfficialGifts(userId){
     if(error)throw error;
   }
 
+  // 旧名称の公式ギフトを現在の名称へ統合する
+  // 旧名称が残っていると、同じギフトが重複したり分類から漏れたりするため、
+  // カウントを新名称のギフトへ移してから旧行を削除する。
+  const officialAliases=[
+    {oldName:'乙',newName:'乙(げるくま)',coin:5},
+    {oldName:'頑張れ(げるくま)',newName:'がんばれ(げるくま)',coin:5}
+  ];
+
+  for(const alias of officialAliases){
+    const {data:oldRows,error:oldError}=await sb
+      .from('gift_definitions')
+      .select('id,name,coin')
+      .eq('user_id',userId)
+      .eq('source','official')
+      .eq('name',alias.oldName)
+      .eq('coin',alias.coin);
+
+    if(oldError)throw oldError;
+    if(!oldRows?.length)continue;
+
+    const {data:newRows,error:newError}=await sb
+      .from('gift_definitions')
+      .select('id,name,coin')
+      .eq('user_id',userId)
+      .eq('source','official')
+      .eq('name',alias.newName)
+      .eq('coin',alias.coin);
+
+    if(newError)throw newError;
+
+    // 現行の正式名称が存在する場合のみ統合する
+    const target=newRows?.[0];
+    if(!target)continue;
+
+    for(const oldRow of oldRows){
+      const {data:oldCounts,error:oldCountError}=await sb
+        .from('gift_counts')
+        .select('count')
+        .eq('user_id',userId)
+        .eq('gift_id',oldRow.id);
+
+      if(oldCountError)throw oldCountError;
+
+      const {data:targetCounts,error:targetCountError}=await sb
+        .from('gift_counts')
+        .select('count')
+        .eq('user_id',userId)
+        .eq('gift_id',target.id);
+
+      if(targetCountError)throw targetCountError;
+
+      const oldTotal=(oldCounts||[]).reduce((sum,row)=>sum+Number(row.count||0),0);
+      const targetTotal=(targetCounts||[]).reduce((sum,row)=>sum+Number(row.count||0),0);
+      const mergedTotal=oldTotal+targetTotal;
+
+      if(mergedTotal>0){
+        const {error:upsertError}=await sb.from('gift_counts').upsert({
+          user_id:userId,
+          gift_id:target.id,
+          count:mergedTotal,
+          updated_at:new Date().toISOString()
+        },{onConflict:'user_id,gift_id'});
+        if(upsertError)throw upsertError;
+      }
+
+      const {error:deleteCountError}=await sb.from('gift_counts').delete()
+        .eq('user_id',userId)
+        .eq('gift_id',oldRow.id);
+      if(deleteCountError)throw deleteCountError;
+
+      const {error:deleteGiftError}=await sb.from('gift_definitions').delete()
+        .eq('user_id',userId)
+        .eq('id',oldRow.id);
+      if(deleteGiftError)throw deleteGiftError;
+    }
+  }
+
   // 公式ギフトの分類を更新する
   const {data:officialRows,error:officialError}=await sb
     .from('gift_definitions')
@@ -1867,7 +1944,7 @@ async function resetAllGifts(){
   const {error}=await sb
     .from('gift_counts')
     .delete()
-    .eq('user_id',state.user.id);
+    .eq('user_id',state.appUserId);
 
   if(error){
     toast('一括リセットに失敗しました：'+error.message);
@@ -1894,7 +1971,7 @@ function resetEvent(event){
   sb
     .from('gift_counts')
     .delete()
-    .eq('user_id',state.user.id)
+    .eq('user_id',state.appUserId)
     .in('gift_id',ids)
     .then(
       ({error})=>{
