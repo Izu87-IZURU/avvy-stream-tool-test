@@ -224,6 +224,7 @@ let state={
   eventGiftSettings:{},
   includeSeasonGiftsInEndurance:true,
   giftTargets:{},
+  giftViewMode:'all',
 
   entryCount:0,
   entryGoal:100,
@@ -1183,6 +1184,10 @@ function gift(){
   const overall=
     giftTypeSummary(allSelected);
 
+  if(state.giftViewMode==='collect'){
+    return giftCollectionPage();
+  }
+
   return `
     <div class="card">
 
@@ -1193,13 +1198,10 @@ function gift(){
             1回でも受け取ったギフトは達成済みになります。
           </p>
         </div>
-
-        <button
-          class="secondary"
-          id="eventSettings"
-        >
-          イベント設定
-        </button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="secondary" id="showGiftCollection">ギフト集め ▾</button>
+          <button class="secondary" id="eventSettings">イベント設定</button>
+        </div>
       </div>
 
       <div class="row" style="margin:10px 0 8px;align-items:center;justify-content:space-between">
@@ -1245,6 +1247,77 @@ function gift(){
 
     </div>
   `;
+}
+
+function collectionStorageKey(){
+  return `avvyGiftCollection:${state.appUserId||'local'}`;
+}
+function getGiftCollectionGoals(){
+  try{return JSON.parse(localStorage.getItem(collectionStorageKey())||'[]')}catch(e){return []}
+}
+function saveGiftCollectionGoals(goals){
+  localStorage.setItem(collectionStorageKey(),JSON.stringify(goals));
+}
+function giftCollectionPage(){
+  const goals=getGiftCollectionGoals();
+  const enabled=state.gifts.filter(g=>g.source!=='origift');
+  const mascotNames=[...new Set(enabled.map(g=>g.mascot).filter(Boolean))];
+  const rows=goals.map((goal,index)=>{
+    let goalGifts=[];
+    if(goal.type==='mascot'){
+      goalGifts=enabled.filter(g=>g.mascot===goal.mascot);
+    }else if(goal.type==='multi'){
+      goalGifts=(goal.giftIds||[]).map(id=>enabled.find(g=>String(g.id)===String(id))).filter(Boolean);
+    }else{
+      const g=enabled.find(x=>String(x.id)===String(goal.giftId));
+      if(g)goalGifts=[g];
+    }
+    const current=goalGifts.reduce((sum,g)=>sum+Number(state.giftCounts[g.id]||0),0);
+    const target=Math.max(1,Number(goal.target)||1);
+    const pct=Math.min(100,current/target*100);
+    const giftRows=goalGifts.map(g=>{
+      const count=Number(state.giftCounts[g.id]||0);
+      return `<div class="row" style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid var(--line,#eee)">
+        <div style="min-width:0;flex:1"><strong>${esc(g.name)}</strong><div class="top-note">${Number(g.coin)||0}C · ${count} 個</div></div>
+        <div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><button type="button" class="secondary small-btn" data-collection-minus="${esc(g.id)}" aria-label="${esc(g.name)}を1個減らす" ${count<=0?'disabled':''}>−1</button><button type="button" class="primary small-btn" data-collection-plus="${esc(g.id)}" aria-label="${esc(g.name)}を1個増やす">＋1</button></div>
+      </div>`;
+    }).join('');
+    return `<div class="card" style="margin:10px 0;padding:14px">
+      <div class="section-head"><div><strong>${esc(goal.label)}</strong><p class="top-note">${goal.type==='mascot'?'該当ケモずのギフトを種類問わず合算':goal.type==='multi'?'選択したギフトの合計':'指定ギフトのみ'}</p></div><button class="danger small-btn" data-remove-collection-goal="${index}">削除</button></div>
+      <div style="display:flex;justify-content:space-between;gap:8px;margin:10px 0"><strong>${current} / ${target} 個</strong><span class="pill">${current>=target?'達成！':`${Math.round(pct)}%`}</span></div>
+      <div style="height:8px;background:var(--line,#eee);border-radius:99px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--accent,#e98f8f);border-radius:99px"></div></div>
+      <div style="margin-top:10px">${giftRows||'<p class="top-note">対象ギフトがありません。</p>'}</div>
+    </div>`;
+  }).join('');
+  const giftOptions=enabled.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}（${Number(g.coin)}C）</option>`).join('');
+  const mascotOptions=mascotNames.map(m=>`<option value="${esc(m)}">${esc(m)}</option>`).join('');
+  return `<div class="card">
+    <div class="section-head"><div><h2>🎯 ギフト集め</h2><p class="top-note">特定ギフト・複数ギフト・ケモず単位で目標を設定できます。</p></div><button class="secondary" id="showAllGiftEndurance">全ギフト耐久 ▾</button></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><button class="primary" id="addGiftCollectionGoal">＋ 目標を追加</button><button class="secondary" id="resetGiftCollectionGoals">目標をすべて削除</button></div>
+    ${rows||'<div class="empty">まだ目標がありません。「目標を追加」から設定できます。</div>'}
+    <p class="top-note" style="margin-top:12px">目標設定はこのブラウザに保存されます。受け取り数は既存のギフトカウントを利用します。</p>
+  </div>`;
+}
+function addGiftCollectionGoal(){
+  const gifts=state.gifts.filter(g=>g.source!=='origift');
+  if(!gifts.length){toast('ギフトデータがありません');return;}
+  const m=modal(`<div class="section-head"><h2>🎯 集める目標を追加</h2><button class="iconbtn" id="closeCollectionModal">×</button></div>
+    <div class="form"><label>集め方</label><select id="collectionType"><option value="gift">特定のギフト</option><option value="multi">複数のギフトを合算</option><option value="mascot">ケモずを集める（種類問わず合算）</option></select>
+    <div id="collectionGiftFields"><label>ギフト</label><select id="collectionGift">${gifts.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}（${Number(g.coin)}C）</option>`).join('')}</select></div>
+    <div id="collectionMultiFields" style="display:none"><label>集めるギフト（複数選択可）</label><select id="collectionGifts" multiple size="8">${gifts.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}（${Number(g.coin)}C）</option>`).join('')}</select><p class="top-note">Ctrlキー（MacはCommandキー）を押しながら複数選択できます。</p></div>
+    <div id="collectionMascotFields" style="display:none"><label>ケモず</label><select id="collectionMascot">${[...new Set(gifts.map(g=>g.mascot).filter(Boolean))].map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}</select></div>
+    <label>目標個数</label><input id="collectionTarget" type="number" min="1" value="10"><button class="primary" id="saveCollectionGoal">目標を追加</button></div>`);
+  const type=m.querySelector('#collectionType');
+  const update=()=>{const v=type.value;m.querySelector('#collectionGiftFields').style.display=v==='gift'?'':'none';m.querySelector('#collectionMultiFields').style.display=v==='multi'?'':'none';m.querySelector('#collectionMascotFields').style.display=v==='mascot'?'':'none';};
+  type.addEventListener('change',update);
+  m.querySelector('#closeCollectionModal').onclick=()=>m.remove();
+  m.querySelector('#saveCollectionGoal').onclick=()=>{
+    const v=type.value;const target=Math.max(1,Number(m.querySelector('#collectionTarget').value)||1);let goal;
+    if(v==='gift'){const id=m.querySelector('#collectionGift').value;const g=gifts.find(x=>x.id===id);goal={type:'gift',giftId:id,label:g?.name||'ギフト',target};}
+    else if(v==='multi'){const ids=[...m.querySelector('#collectionGifts').selectedOptions].map(o=>o.value);if(!ids.length){toast('ギフトを1つ以上選んでください');return;}goal={type:'multi',giftIds:ids,label:ids.map(id=>gifts.find(g=>g.id===id)?.name).filter(Boolean).join('＋'),target};}
+    else{const mascot=m.querySelector('#collectionMascot').value;goal={type:'mascot',mascot,label:`${mascot}集め`,target};}
+    const goals=getGiftCollectionGoals();goals.push(goal);saveGiftCollectionGoals(goals);m.remove();render();
+  };
 }
 
 function giftSeasonGroup(){
@@ -4294,6 +4367,13 @@ function bind(){
     'click',
     eventSettingsModal
   );
+  $('#showGiftCollection')?.addEventListener('click',()=>{state.giftViewMode='collect';render();});
+  $('#showAllGiftEndurance')?.addEventListener('click',()=>{state.giftViewMode='all';render();});
+  $('#addGiftCollectionGoal')?.addEventListener('click',addGiftCollectionGoal);
+  $('#resetGiftCollectionGoals')?.addEventListener('click',()=>{if(confirm('ギフト集めの目標をすべて削除しますか？')){saveGiftCollectionGoals([]);render();}});
+  document.querySelectorAll('[data-remove-collection-goal]').forEach(b=>b.addEventListener('click',()=>{const goals=getGiftCollectionGoals();goals.splice(Number(b.dataset.removeCollectionGoal),1);saveGiftCollectionGoals(goals);render();}));
+  document.querySelectorAll('[data-collection-plus]').forEach(b=>b.addEventListener('click',()=>incrementGift(b.dataset.collectionPlus)));
+  document.querySelectorAll('[data-collection-minus]').forEach(b=>b.addEventListener('click',()=>decrementGift(b.dataset.collectionMinus)));
 
   $('#resetAllGifts')?.addEventListener('click',resetAllGifts);
   $('#toggleSeasonGiftEndurance')?.addEventListener('click',toggleSeasonGiftEndurance);
