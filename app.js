@@ -1189,17 +1189,17 @@ function gift(){
   }
 
   return `
-    <div class="card">
+    <div class="card gift-ui gift-endurance">
 
       <div class="section-head">
         <div>
-          <h2>🎁 ギフト耐久</h2>
+          <h2>🎁 全ギフ耐久</h2>
           <p class="top-note">
             1回でも受け取ったギフトは達成済みになります。
           </p>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="secondary" id="showGiftCollection">ギフト集め ▾</button>
+          <button class="secondary gift-switch" id="showGiftCollection">ギフト集めへ →</button>
           <button class="secondary" id="eventSettings">イベント設定</button>
         </div>
       </div>
@@ -1282,7 +1282,7 @@ function giftCollectionPage(){
         <div style="display:flex;gap:6px;align-items:center;flex-shrink:0"><button type="button" class="secondary small-btn" data-collection-minus="${esc(g.id)}" aria-label="${esc(g.name)}を1個減らす" ${count<=0?'disabled':''}>−1</button><button type="button" class="primary small-btn" data-collection-plus="${esc(g.id)}" aria-label="${esc(g.name)}を1個増やす">＋1</button></div>
       </div>`;
     }).join('');
-    return `<div class="card" style="margin:10px 0;padding:14px">
+    return `<div class="card collection-goal" style="margin:10px 0;padding:14px">
       <div class="section-head"><div><strong>${esc(goal.label)}</strong><p class="top-note">${goal.type==='mascot'?'該当ケモずのギフトを種類問わず合算':goal.type==='multi'?'選択したギフトの合計':'指定ギフトのみ'}</p></div><button class="danger small-btn" data-remove-collection-goal="${index}">削除</button></div>
       <div style="display:flex;justify-content:space-between;gap:8px;margin:10px 0"><strong>${current} / ${target} 個</strong><span class="pill">${current>=target?'達成！':`${Math.round(pct)}%`}</span></div>
       <div style="height:8px;background:var(--line,#eee);border-radius:99px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--accent,#e98f8f);border-radius:99px"></div></div>
@@ -1291,8 +1291,8 @@ function giftCollectionPage(){
   }).join('');
   const giftOptions=enabled.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}（${Number(g.coin)}C）</option>`).join('');
   const mascotOptions=mascotNames.map(m=>`<option value="${esc(m)}">${esc(m)}</option>`).join('');
-  return `<div class="card">
-    <div class="section-head"><div><h2>🎯 ギフト集め</h2><p class="top-note">特定ギフト・複数ギフト・ケモず単位で目標を設定できます。</p></div><button class="secondary" id="showAllGiftEndurance">全ギフト耐久 ▾</button></div>
+  return `<div class="card gift-ui gift-collection">
+    <div class="section-head"><div><h2>🎯 ギフト集め</h2><p class="top-note">特定ギフト・複数ギフト・ケモず単位で目標を設定できます。</p></div><button class="secondary gift-switch" id="showAllGiftEndurance">← 全ギフ耐久へ</button></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><button class="primary" id="addGiftCollectionGoal">＋ 目標を追加</button><button class="secondary" id="resetGiftCollectionGoals">目標をすべて削除</button></div>
     ${rows||'<div class="empty">まだ目標がありません。「目標を追加」から設定できます。</div>'}
     <p class="top-note" style="margin-top:12px">目標設定はこのブラウザに保存されます。受け取り数は既存のギフトカウントを利用します。</p>
@@ -2993,6 +2993,50 @@ async function bindEntryEndurance(){
    ここが今回追加した render()
    ================================================== */
 
+function ensureGiftUiStyles(){
+  if(document.getElementById('avvy-gift-ui-styles')) return;
+  const style=document.createElement('style');
+  style.id='avvy-gift-ui-styles';
+  style.textContent=`
+    .gift-ui{--gift-pink:#e98f8f;--gift-pink-dark:#b95f69;--gift-pink-soft:#fff0f0;--gift-pink-line:#f4d6d6;}
+    .gift-ui.gift-endurance,.gift-ui.gift-collection{background:#fff;border:1px solid var(--gift-pink-line);border-radius:22px;box-shadow:0 8px 24px rgba(190,105,105,.07);padding:clamp(14px,2.5vw,24px);}
+    .gift-ui .section-head{align-items:center;gap:12px;margin-bottom:16px;}
+    .gift-ui .section-head h2{margin:0 0 5px;font-size:clamp(1.2rem,2.5vw,1.55rem);letter-spacing:.01em;}
+    .gift-ui .top-note{line-height:1.6;}
+    .gift-ui .gift-switch{background:var(--gift-pink-soft)!important;color:var(--gift-pink-dark)!important;border:1px solid #efbcbc!important;border-radius:999px!important;font-weight:700;min-height:42px;padding:10px 17px;box-shadow:0 2px 0 rgba(185,95,105,.08);transition:transform .15s ease,background .15s ease;}
+    .gift-ui .gift-switch:hover{background:#ffe3e3!important;transform:translateY(-1px);}
+    .gift-ui .coin-group,.gift-ui .event-group{margin:18px 0;padding:15px;border:1px solid var(--gift-pink-line);border-radius:18px;background:linear-gradient(180deg,#fff 0%,#fffafa 100%);}
+    .gift-ui .coin-head{gap:10px;}
+    .gift-ui .coin-title{font-size:1.15rem;font-weight:800;color:#a9515b;}
+    .gift-ui .gift-category,.gift-ui .mascot-group{margin-top:12px;padding:12px;border-radius:14px;background:#fff6f6;border:1px solid #f8e3e3;}
+    .gift-ui .gift-category h4,.gift-ui .mascot-group h5{margin:0 0 10px;color:#96545b;}
+    .gift-ui .gift-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,130px),1fr));gap:10px;}
+    .gift-ui .gift-card{padding:7px;border:1px solid #f3dede;border-radius:15px;background:#fff;box-shadow:0 3px 10px rgba(185,95,105,.045);}
+    .gift-ui .gift-btn{min-height:76px;border:1px solid #f0caca!important;border-radius:12px!important;background:#fff1f1!important;color:#7f4149!important;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px 7px;white-space:normal;overflow-wrap:anywhere;transition:transform .12s ease,background .12s ease;}
+    .gift-ui .gift-btn:hover{background:#ffe4e4!important;transform:translateY(-1px);}
+    .gift-ui .gift-btn span{font-size:.88rem;font-weight:800;color:#b65e68;}
+    .gift-ui .gift-card .secondary,.gift-ui .small-btn{border-radius:999px;}
+    .gift-ui .pill{background:#fff0f0;color:#a9515b;border:1px solid #f3d4d4;}
+    .gift-ui .gift-summary,.gift-ui .summary{border-radius:16px;}
+    .gift-ui .empty{border:1px dashed #e9bcbc;background:#fff8f8;border-radius:14px;padding:18px;color:#98666b;}
+    .gift-ui.gift-collection .collection-goal{margin:12px 0;padding:16px;border:1px solid var(--gift-pink-line);border-radius:17px;background:#fffafa;}
+    .gift-ui.gift-collection [data-collection-plus]{border-radius:999px;min-width:48px;}
+    .gift-ui.gift-collection [data-collection-minus]{border-radius:999px;min-width:48px;}
+    .gift-ui .danger{border-radius:999px;}
+    @media(max-width:600px){
+      .gift-ui.gift-endurance,.gift-ui.gift-collection{padding:13px;border-radius:17px;}
+      .gift-ui .section-head{align-items:flex-start;}
+      .gift-ui .section-head>div:last-child{width:100%;}
+      .gift-ui .gift-switch{width:100%;}
+      .gift-ui .coin-group,.gift-ui .event-group{padding:10px;margin:13px 0;}
+      .gift-ui .gift-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+      .gift-ui .gift-card{padding:5px;}
+      .gift-ui .gift-btn{min-height:72px;font-size:.92rem;}
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 function render(){
 
   const root=
@@ -3007,6 +3051,7 @@ function render(){
     return;
   }
 
+  ensureGiftUiStyles();
   applyTheme();
 
   if(state.loading){
