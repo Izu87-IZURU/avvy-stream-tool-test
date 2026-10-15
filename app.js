@@ -3063,6 +3063,17 @@ function ensureGiftUiStyles(){
     .gift-ui.gift-collection [data-collection-plus]{border-radius:999px;min-width:48px;}
     .gift-ui.gift-collection [data-collection-minus]{border-radius:999px;min-width:48px;}
     .gift-ui .danger{border-radius:999px;}
+    /* Step 4: polish hierarchy and tap targets without changing app logic */
+    .gift-ui .section-head{gap:12px;margin-bottom:16px;}
+    .gift-ui .section-head h2,.gift-ui .section-head h3{letter-spacing:.01em;line-height:1.35;}
+    .gift-ui .gift-switch{display:flex;gap:8px;flex-wrap:wrap;}
+    .gift-ui .gift-switch button{min-height:42px;padding:10px 15px;border-radius:999px;font-weight:800;box-shadow:0 2px 0 rgba(185,95,105,.07);}
+    .gift-ui .gift-card{border:1px solid #f2dddd;box-shadow:0 3px 12px rgba(185,95,105,.045);}
+    .gift-ui .gift-card.is-achieved{box-shadow:0 3px 13px rgba(185,95,105,.10);}
+    .gift-ui .gift-card .gift-btn{line-height:1.35;overflow-wrap:anywhere;}
+    .gift-ui .target-summary{box-shadow:0 4px 16px rgba(185,95,105,.045);}
+    .gift-ui .event-coin h4{line-height:1.4;}
+    .gift-ui button{touch-action:manipulation;}
     @media(max-width:600px){
       .gift-ui.gift-endurance,.gift-ui.gift-collection{padding:13px;border-radius:17px;}
       .gift-ui .section-head{align-items:flex-start;}
@@ -3075,7 +3086,13 @@ function ensureGiftUiStyles(){
       .gift-ui .target-summary{padding:11px 12px;}
       .gift-ui .target-main strong{font-size:1.08rem;}
       .gift-ui .event-coin{padding:9px;}
-      .gift-ui .gift-btn{min-height:72px;font-size:.92rem;}
+      .gift-ui .gift-btn{min-height:76px;font-size:.92rem;}
+      .gift-ui .gift-switch{display:grid;grid-template-columns:1fr;gap:8px;}
+      .gift-ui .gift-switch button{width:100%;min-height:44px;}
+      .gift-ui .gift-card [data-gift-minus]{min-width:54px;min-height:40px;}
+      .gift-ui.gift-collection [data-collection-plus],.gift-ui.gift-collection [data-collection-minus]{min-width:44px;min-height:40px;}
+      .gift-ui .target-main{align-items:flex-start;}
+      .gift-ui .target-main strong{overflow-wrap:anywhere;}
     }
   `;
   document.head.appendChild(style);
