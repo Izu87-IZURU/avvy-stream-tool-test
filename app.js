@@ -43,6 +43,16 @@ const ZODIAC=[
   'いて座','やぎ座','みずがめ座','うお座'
 ];
 
+
+// Bundled official gift artwork (preloaded for every user)
+const BUNDLED_GIFT_IMAGES = {"チャーハン":"assets/gifts/イベント/チャーハン.JPG","パンダまん":"assets/gifts/イベント/パンダまん.jpg","フライドポテト":"assets/gifts/イベント/フライドポテト.jpg","線香花火":"assets/gifts/イベント/線香花火.jpg","福":"assets/gifts/イベント/福.JPG","死神":"assets/gifts/イベント/死神.jpg","コーラ":"assets/gifts/イベント/コーラ.jpg","lol(ネオン)":"assets/gifts/イベント/LOL(ネオン).jpg","cool":"assets/gifts/イベント/Cool.jpg","金魚":"assets/gifts/イベント/金魚.jpg","ドンッ!":"assets/gifts/イベント/ドンッ！.jpg","エナジードリンク(ネオン)":"assets/gifts/イベント/エナジードリンク(ネオン).jpg","ハート(ネオン)":"assets/gifts/イベント/ハート(ネオン).jpg","ストロベリーシェイク":"assets/gifts/イベント/ストロベリーシェイク.jpg","ロリポップ":"assets/gifts/イベント/ロリポップ.jpg","風車":"assets/gifts/イベント/風車.JPG","ゴースト":"assets/gifts/イベント/ゴースト.jpg","黒猫":"assets/gifts/イベント/黒猫.jpg","フルーツキャンディ":"assets/gifts/イベント/フルーツキャンディ.JPG","let's go!":"assets/gifts/イベント/Let's Go！.jpg","ソーダ":"assets/gifts/イベント/ソーダ.jpg","扇":"assets/gifts/イベント/扇.jpg","音符(ネオン)":"assets/gifts/イベント/音符(ネオン).jpg","フルーツペンライト":"assets/gifts/イベント/フルーツペンライト.jpg","麻雀牌":"assets/gifts/イベント/麻雀牌.jpg","フルーツポンチ":"assets/gifts/イベント/フルーツポンチ.JPG","アイスキャンディー":"assets/gifts/イベント/アイスキャンディー.jpg","ラムネ":"assets/gifts/イベント/ラムネ.jpg","コウモリ":"assets/gifts/イベント/コウモリ.JPG","レコード":"assets/gifts/イベント/レコード.jpg","アイスクリーム":"assets/gifts/通常/アイスクリーム.jpg","キラキラ":"assets/gifts/通常/キラキラ.JPG","100本のバラ":"assets/gifts/通常/100本のバラ.JPG","ドドド":"assets/gifts/通常/ドドド.jpg","お茶":"assets/gifts/通常/お茶.jpg","ミニケーキ":"assets/gifts/通常/ミニケーキ.jpg","乾杯":"assets/gifts/通常/乾杯.jpg","ハートラッシュ!":"assets/gifts/通常/ハートラッシュ！.jpg","ハート風船":"assets/gifts/通常/ハート風船.jpg","ペンライト振り":"assets/gifts/通常/ペンライト振り.jpg","尊い":"assets/gifts/通常/尊い.jpg","ビックハートクッション":"assets/gifts/通常/ビックハートクッション.jpg","レインボーステージ":"assets/gifts/通常/レインボーステージ.jpg","花火セレナーデ":"assets/gifts/通常/花火セレナーデ.jpg","集中線":"assets/gifts/通常/集中線.jpg","ハロウィンナイト":"assets/gifts/通常/ハロウィンナイト.jpg","ケモずファンファーレ":"assets/gifts/通常/ケモずファンファーレ.jpg","たしカニ":"assets/gifts/通常/文字/たしカニ.jpg","うんうん":"assets/gifts/通常/文字/うんうん.jpg","最高":"assets/gifts/通常/文字/最高.jpg","god":"assets/gifts/通常/文字/GOD.jpg","?":"assets/gifts/通常/文字/？.jpg","notok":"assets/gifts/通常/文字/NOTOK.jpg","img_e3767":"assets/gifts/通常/文字/IMG_E3767.JPG","笑":"assets/gifts/通常/文字/笑.jpg","かわいい(青)":"assets/gifts/通常/文字/かわいい(青).jpg","わかりみ":"assets/gifts/通常/文字/わかりみ.jpg","ええやん":"assets/gifts/通常/文字/ええやん.jpg","すやぴっぴ":"assets/gifts/通常/文字/すやぴっぴ.jpg","天才かよ":"assets/gifts/通常/文字/天才かよ.jpg","ww":"assets/gifts/通常/文字/ww.JPG","草":"assets/gifts/通常/文字/草.jpg","うれピーナッツ":"assets/gifts/通常/文字/うれピーナッツ.jpg","さすが":"assets/gifts/通常/文字/さすが.jpg","!?":"assets/gifts/通常/文字/！？.jpg","かわいい(ピンク)":"assets/gifts/通常/文字/かわいい(ピンク).jpg","祝":"assets/gifts/通常/文字/祝.jpg","神回":"assets/gifts/通常/文字/神回.jpg","えっ?":"assets/gifts/通常/文字/えっ？.jpg","ok":"assets/gifts/通常/文字/OK.jpg","バラ":"assets/gifts/通常/アイテム/バラ.jpg","花束":"assets/gifts/通常/アイテム/花束.jpg","クリームソーダ":"assets/gifts/通常/アイテム/クリームソーダ.jpg","プレゼントボックス":"assets/gifts/通常/アイテム/プレゼントボックス.jpg","ペンライト(3本)":"assets/gifts/通常/アイテム/ペンライト(3本).jpg","おめでとう":"assets/gifts/通常/アイテム/おめでとう.jpg","音符":"assets/gifts/通常/アイテム/音符.jpg","つぼみのバラ":"assets/gifts/通常/アイテム/つぼみのバラ.jpg","ペンライト":"assets/gifts/通常/アイテム/ペンライト.jpg","ハート":"assets/gifts/通常/アイテム/ハート.jpg","照れ照れ":"assets/gifts/通常/Avvyケモず/照れ照れ.jpg","おはよう!":"assets/gifts/通常/Avvyケモず/おはよう！.jpg","もぐもぐ":"assets/gifts/通常/Avvyケモず/もぐもぐ.jpg","ごろ寝":"assets/gifts/通常/Avvyケモず/ごろ寝.jpg","お大事に":"assets/gifts/通常/Avvyケモず/お大事に.jpg","またね":"assets/gifts/通常/Avvyケモず/またね.jpg","いいね(ヨルワール)":"assets/gifts/通常/Avvyケモず/いいね(ヨルワール).jpg","おやすみ":"assets/gifts/通常/Avvyケモず/おやすみ.jpg","溶けちゃう":"assets/gifts/通常/Avvyケモず/溶けちゃう.jpg","がんばれ":"assets/gifts/通常/Avvyケモず/がんばれ.jpg","乙":"assets/gifts/通常/Avvyケモず/乙.jpg","いいね(でんきゅいぬ)":"assets/gifts/通常/Avvyケモず/いいね(でんきゅいぬ).jpg","しょぼぼーん":"assets/gifts/通常/Avvyケモず/しょぼぼーん.jpg","メラメラ":"assets/gifts/通常/Avvyケモず/メラメラ.jpg","ただいま~":"assets/gifts/通常/Avvyケモず/ただいま～.jpg","パチパチ":"assets/gifts/通常/Avvyケモず/パチパチ.jpg","たましい":"assets/gifts/通常/Avvyケモず/たましい.jpg","チルい":"assets/gifts/通常/Avvyケモず/チルい.jpg","たすかる":"assets/gifts/通常/Avvyケモず/たすかる.jpg","ありがとう":"assets/gifts/通常/Avvyケモず/ありがとう.jpg","おかえり":"assets/gifts/通常/Avvyケモず/おかえり.jpg","big thanks":"assets/gifts/通常/Avvyケモず/Big Thanks.jpg","心配":"assets/gifts/通常/Avvyケモず/心配.jpg","おなかすいた":"assets/gifts/通常/Avvyケモず/おなかすいた.jpg","わかる":"assets/gifts/通常/Avvyケモず/わかる.jpg","ショック!":"assets/gifts/通常/Avvyケモず/ショック！.jpg","充電中":"assets/gifts/通常/Avvyケモず/充電中.jpg","嬉しい!":"assets/gifts/通常/Avvyケモず/嬉しい！.jpg","かまって":"assets/gifts/通常/Avvyケモず/かまって.jpg","カチコチ":"assets/gifts/通常/Avvyケモず/カチコチ.jpg","推し":"assets/gifts/通常/Avvyケモず/推し.jpg","ごゆっくり":"assets/gifts/通常/Avvyケモず/ごゆっくり.jpg"};
+function bundledGiftImage(g){
+  const norm=s=>String(s||'').normalize('NFKC').replace(/[♡♥]/g,'').replace(/\s+/g,'').toLowerCase();
+  const candidates=[g.name, g.name.replace(/\([^)]*\)$/,''), g.name.replace(/♡/g,''), g.name.replace(/\s*NOT\s*OK/i,'NOTOK')];
+  for(const name of candidates){ const key=norm(name); for(const [k,path] of Object.entries(BUNDLED_GIFT_IMAGES)){ if(norm(k)===key) return path.split('/').map(encodeURIComponent).join('/'); } }
+  return '';
+}
+
 const OFFICIAL_GIFTS=[
   // 5C：文字系
   {name:'ええやん',coin:5,group:'文字系'},
@@ -1559,23 +1569,15 @@ function giftButtons(gs){
       ${
         gs.map(
           g=>`
-            <div class="gift-card ${Number(state.giftCounts[g.id]||0)>0?'is-achieved':'is-unachieved'}" style="display:flex;flex-direction:column;gap:6px;min-width:0">
-              <button
-                class="gift-btn"
-                data-gift="${g.id}"
-                style="width:100%"
-                aria-label="${esc(g.name)}、現在${Number(state.giftCounts[g.id]||0)}個。押すと1個追加"
-              >
-                <strong>
-                  🎁 ${esc(g.source==='season' ? `${g.name}（${Number(g.coin)}c）` : g.name)}
-                </strong>
-
-                <span>
-                  ${Number(state.giftCounts[g.id]||0)}個
-                </span>
-              </button>
-              <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-                <button type="button" class="secondary" data-gift-minus="${g.id}" ${Number(state.giftCounts[g.id]||0)<=0?'disabled':''} aria-label="${esc(g.name)}を1個減らす">−1</button>
+            <div class="gift-card ${Number(state.giftCounts[g.id]||0)>0?'is-achieved':'is-unachieved'}" style="display:flex;flex-direction:column;gap:8px;min-width:0">
+              <div class="gift-btn" style="width:100%" aria-label="${esc(g.name)}の現在のカウント">
+                ${bundledGiftImage(g) ? `<img class="bundled-gift-image" src="${bundledGiftImage(g)}" alt="${esc(g.name)}" loading="lazy" style="width:100%;max-width:112px;aspect-ratio:1;object-fit:contain;display:block;margin:0 auto 6px;border-radius:10px" />` : ''}
+                <strong>${esc(g.source==='season' ? `${g.name}（${Number(g.coin)}c）` : g.name)}</strong>
+                <span>${Number(state.giftCounts[g.id]||0)}個</span>
+              </div>
+              <div class="gift-counter-controls" role="group" aria-label="${esc(g.name)}のカウント操作">
+                <button type="button" class="gift-counter-btn gift-counter-minus" data-gift-minus="${g.id}" ${Number(state.giftCounts[g.id]||0)<=0?'disabled':''} aria-label="${esc(g.name)}を1個減らす"><span aria-hidden="true">−</span><small>1</small></button>
+                <button type="button" class="gift-counter-btn gift-counter-plus" data-gift="${g.id}" aria-label="${esc(g.name)}を1個増やす"><span aria-hidden="true">＋</span><small>1</small></button>
               </div>
             </div>
           `
@@ -3093,6 +3095,23 @@ function ensureGiftUiStyles(){
       .gift-ui.gift-collection [data-collection-plus],.gift-ui.gift-collection [data-collection-minus]{min-width:44px;min-height:40px;}
       .gift-ui .target-main{align-items:flex-start;}
       .gift-ui .target-main strong{overflow-wrap:anywhere;}
+    }
+
+    /* Step 5: paired plus/minus controls inspired by the earlier gift-card mockup */
+    .gift-ui .gift-counter-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:1px;}
+    .gift-ui .gift-counter-btn{display:flex;align-items:center;justify-content:center;gap:5px;min-width:0;min-height:42px;padding:7px 10px;border-radius:12px!important;font-weight:800;line-height:1;border:1px solid #efcaca!important;box-shadow:0 2px 0 rgba(185,95,105,.07);transition:transform .12s ease,filter .12s ease,box-shadow .12s ease;}
+    .gift-ui .gift-counter-btn span{font-size:1.15rem;line-height:1;}
+    .gift-ui .gift-counter-btn small{font-size:.78rem;font-weight:800;}
+    .gift-ui .gift-counter-minus{background:#fff!important;color:#ad6970!important;border-color:#f0dada!important;}
+    .gift-ui .gift-counter-plus{background:linear-gradient(180deg,#f4aaaa 0%,#e98f8f 100%)!important;color:#fff!important;border-color:#e98f8f!important;box-shadow:0 3px 0 #d97d7d;}
+    .gift-ui .gift-counter-btn:hover:not(:disabled){filter:brightness(.99);transform:translateY(-1px);}
+    .gift-ui .gift-counter-btn:active:not(:disabled){transform:translateY(1px);box-shadow:none;}
+    .gift-ui .gift-counter-btn:focus-visible{outline:3px solid #f4b8bd;outline-offset:2px;}
+    .gift-ui .gift-counter-btn:disabled{opacity:.38;cursor:not-allowed;box-shadow:none;}
+    .gift-ui .gift-card .gift-btn{cursor:default;user-select:text;}
+    @media(max-width:600px){
+      .gift-ui .gift-counter-controls{gap:6px;}
+      .gift-ui .gift-counter-btn{min-height:42px;padding:7px 5px;border-radius:11px!important;}
     }
   `;
   document.head.appendChild(style);
