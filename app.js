@@ -1559,11 +1559,12 @@ function giftButtons(gs){
       ${
         gs.map(
           g=>`
-            <div class="gift-card" style="display:flex;flex-direction:column;gap:6px;min-width:0">
+            <div class="gift-card ${Number(state.giftCounts[g.id]||0)>0?'is-achieved':'is-unachieved'}" style="display:flex;flex-direction:column;gap:6px;min-width:0">
               <button
                 class="gift-btn"
                 data-gift="${g.id}"
                 style="width:100%"
+                aria-label="${esc(g.name)}、現在${Number(state.giftCounts[g.id]||0)}個。押すと1個追加"
               >
                 <strong>
                   🎁 ${esc(g.source==='season' ? `${g.name}（${Number(g.coin)}c）` : g.name)}
@@ -3011,7 +3012,20 @@ function ensureGiftUiStyles(){
     .gift-ui .gift-category,.gift-ui .mascot-group{margin-top:12px;padding:12px;border-radius:14px;background:#fff6f6;border:1px solid #f8e3e3;}
     .gift-ui .gift-category h4,.gift-ui .mascot-group h5{margin:0 0 10px;color:#96545b;}
     .gift-ui .gift-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,130px),1fr));gap:10px;}
-    .gift-ui .gift-card{padding:7px;border:1px solid #f3dede;border-radius:15px;background:#fff;box-shadow:0 3px 10px rgba(185,95,105,.045);}
+    .gift-ui .gift-card{padding:7px;border:1px solid #f3dede;border-radius:15px;background:#fff;box-shadow:0 3px 10px rgba(185,95,105,.045);transition:border-color .15s ease,box-shadow .15s ease;}
+    .gift-ui .gift-card.is-achieved{border-color:#e7a5aa;background:linear-gradient(180deg,#fff 0%,#fff5f5 100%);box-shadow:0 3px 12px rgba(185,95,105,.09);}
+    .gift-ui .gift-card.is-achieved::before{content:"✓ 達成";display:inline-flex;align-self:flex-start;align-items:center;padding:3px 8px;border-radius:999px;background:#fce5e7;color:#a9515b;font-size:.72rem;font-weight:800;letter-spacing:.02em;}
+    .gift-ui .gift-card.is-unachieved::before{content:"未達成";display:inline-flex;align-self:flex-start;padding:3px 8px;border-radius:999px;background:#f7f7f7;color:#8b8585;font-size:.72rem;font-weight:700;}
+    .gift-ui .target-summary{margin:12px 0 16px;padding:14px 16px;border:1px solid #f3dada;border-radius:16px;background:#fff8f8;}
+    .gift-ui .target-main{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+    .gift-ui .target-main strong{font-size:1.2rem;color:#9f4e58;}
+    .gift-ui .target-main span{font-size:.9rem;color:#956b70;}
+    .gift-ui .summary-label{margin-top:4px;color:#9b656b;font-size:.82rem;font-weight:700;}
+    .gift-ui .progress{height:10px;margin-top:10px;border-radius:999px;overflow:hidden;background:#f4e5e5;}
+    .gift-ui .progress i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#f2b4b4,#e98f8f);transition:width .25s ease;}
+    .gift-ui .complete-badge{margin-top:10px;padding:9px 12px;border-radius:12px;background:#fce5e7;color:#9f4e58;text-align:center;font-weight:800;}
+    .gift-ui .event-coin{margin:12px 0;padding:12px;border-radius:14px;background:#fff7f7;border:1px solid #f6e0e0;}
+    .gift-ui .event-coin h4{margin:0;color:#a9515b;}
     .gift-ui .gift-btn{min-height:76px;border:1px solid #f0caca!important;border-radius:12px!important;background:#fff1f1!important;color:#7f4149!important;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px 7px;white-space:normal;overflow-wrap:anywhere;transition:transform .12s ease,background .12s ease;}
     .gift-ui .gift-btn:hover{background:#ffe4e4!important;transform:translateY(-1px);}
     .gift-ui .gift-btn span{font-size:.88rem;font-weight:800;color:#b65e68;}
@@ -3031,6 +3045,10 @@ function ensureGiftUiStyles(){
       .gift-ui .coin-group,.gift-ui .event-group{padding:10px;margin:13px 0;}
       .gift-ui .gift-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
       .gift-ui .gift-card{padding:5px;}
+      .gift-ui .gift-card.is-achieved::before,.gift-ui .gift-card.is-unachieved::before{font-size:.67rem;padding:3px 7px;}
+      .gift-ui .target-summary{padding:11px 12px;}
+      .gift-ui .target-main strong{font-size:1.08rem;}
+      .gift-ui .event-coin{padding:9px;}
       .gift-ui .gift-btn{min-height:72px;font-size:.92rem;}
     }
   `;
