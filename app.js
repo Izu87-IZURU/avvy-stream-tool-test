@@ -224,6 +224,7 @@ let state={
   eventGiftSettings:{},
   includeSeasonGiftsInEndurance:true,
   giftTargets:{},
+  giftViewMode:'all',
 
   entryCount:0,
   entryGoal:100,
@@ -336,15 +337,15 @@ async function loadCustomItems(){
 async function ensureOfficialGifts(userId){
   const all=[
     ...OFFICIAL_GIFTS.map((g,i)=>({
-      ...g,source:'official',event_key:null,sort_order:i
+      ...g, source:'official', event_key:null, sort_order:i
     })),
     ...Object.entries(EVENT_GIFTS).flatMap(([event,gs])=>
       gs.map((g,i)=>({
-        ...g,source:'event',event_key:event,sort_order:i
+        ...g, source:'event', event_key:event, sort_order:i
       }))
     ),
     ...SEASON_GIFTS.map((g,i)=>({
-      ...g,source:'season',event_key:null,sort_order:i
+      ...g, source:'season', event_key:null, sort_order:i
     }))
   ].map(g=>({
     user_id:userId,
@@ -360,123 +361,145 @@ async function ensureOfficialGifts(userId){
     variant:g.variant||null
   }));
 
-  // まず登録済みのギフトを取得する
-  const {data:initialRows,error:initialError}=await sb
+ 
+  const {data:existingAll,error:existingError}=await sb
     .from('gift_definitions')
     .select('id,name,coin,source,event_key')
     .eq('user_id',userId);
-  if(initialError)throw initialError;
 
-  const keyOf=g=>`${g.source||'original'}|${g.event_key||''}|${g.name}|${g.coin}`;
-  const existingKeys=new Set((initialRows||[]).map(keyOf));
-  const missing=all.filter(g=>!existingKeys.has(keyOf(g)));
+  if(existingError)throw existingError;
+
+  const existingOfficial=(existingAll||[]).filter(
+    g=>g.source==='official'
+  );
+
+  const groups=new Map();
+
+  for(const g of existingOfficial){
+    const key=`${g.name}|${g.coin}`;
+    if(!groups.has(key))groups.set(key,[]);
+    groups.get(key).push(g);
+  }
+
+  const duplicateIds=[];
+
+  for(const rows of groups.values()){
+    if(rows.length<=1)continue;
+
+    const keep=rows[0];
+    const ids=rows.slice(1).map(x=>x.id);
+
+    const {data:counts,error:countError}=await sb
+      .from('gift_counts')
+      .select('gift_id,count')
+      .eq('user_id',state.user.id)
+      .in('gift_id',[keep.id,...ids]);
+
+    if(countError)throw countError;
+
+    const total=(counts||[]).reduce(
+      (sum,x)=>sum+Number(x.count||0),0
+    );
+
+    if(total>0){
+      const {error}=await sb.from('gift_counts').upsert({
+        user_id:state.user.id,
+        gift_id:keep.id,
+        count:total,
+        updated_at:new Date().toISOString()
+      },{onConflict:'user_id,gift_id'});
+
+      if(error)throw error;
+    }
+
+    if(ids.length){
+      const {error}=await sb.from('gift_counts').delete()
+        .eq('user_id',state.user.id)
+        .in('gift_id',ids);
+
+      if(error)throw error;
+
+      duplicateIds.push(...ids);
+    }
+  }
+
+  if(duplicateIds.length){
+    const {error}=await sb.from('gift_definitions').delete()
+      .eq('user_id',userId)
+      .in('id',duplicateIds);
+
+    if(error)throw error;
+  }
+
+  // 既存ギフトを再取得
+  const {data:existing,error:reloadError}=await sb
+    .from('gift_definitions')
+    .select('id,name,coin,source,event_key')
+    .eq('user_id',userId);
+
+  if(reloadError)throw reloadError;
+
+  const keySet=new Set((existing||[]).map(g=>
+    `${g.source||'original'}|${g.event_key||''}|${g.name}|${g.coin}`
+  ));
+
+  // 未登録のギフトだけ追加
+  const missing=all.filter(g=>!keySet.has(
+    `${g.source}|${g.event_key||''}|${g.name}|${g.coin}`
+  ));
 
   if(missing.length){
     const {error}=await sb.from('gift_definitions').insert(missing);
     if(error)throw error;
   }
 
-  // 旧名称を正式名称に統合する。カウントは正式名称側へ合算する。
-  const aliases={
-    '乙':'乙(げるくま)',
-    '頑張れ(げるくま)':'がんばれ(げるくま)'
-  };
-
-  const {data:allRows,error:allRowsError}=await sb
-    .from('gift_definitions')
-    .select('id,name,coin,source,event_key,group_name,mascot,variant')
-    .eq('user_id',userId);
-  if(allRowsError)throw allRowsError;
-
-  const officialKeys=new Set(OFFICIAL_GIFTS.map(g=>`${g.name}|${g.coin}`));
-  const normalizedKey=g=>{
-    let name=g.name;
-    if(g.source==='official' && Object.prototype.hasOwnProperty.call(aliases,name)){
-      const target=aliases[name];
-      if(officialKeys.has(`${target}|${g.coin}`))name=target;
-    }
-    return `${g.source||'original'}|${g.event_key||''}|${name}|${g.coin}`;
-  };
-
-  const groups=new Map();
-  for(const row of allRows||[]){
-    const key=normalizedKey(row);
-    if(!groups.has(key))groups.set(key,[]);
-    groups.get(key).push(row);
-  }
-
-  for(const [key,rows] of groups.entries()){
-    if(rows.length<=1)continue;
-
-    // 正式名称の行を優先して残す
-    const parts=key.split('|');
-    const canonicalName=parts[2];
-    const keep=rows.find(row=>row.name===canonicalName)||rows[0];
-    const removeRows=rows.filter(row=>row.id!==keep.id);
-    const ids=rows.map(row=>row.id);
-
-    const {data:counts,error:countsError}=await sb
-      .from('gift_counts')
-      .select('gift_id,count')
-      .eq('user_id',userId)
-      .in('gift_id',ids);
-    if(countsError)throw countsError;
-
-    const total=(counts||[]).reduce((sum,row)=>sum+Number(row.count||0),0);
-
-    const {error:deleteCountsError}=await sb
-      .from('gift_counts')
-      .delete()
-      .eq('user_id',userId)
-      .in('gift_id',ids);
-    if(deleteCountsError)throw deleteCountsError;
-
-    if(total>0){
-      const {error:upsertError}=await sb.from('gift_counts').upsert({
-        user_id:userId,
-        gift_id:keep.id,
-        count:total,
-        updated_at:new Date().toISOString()
-      },{onConflict:'user_id,gift_id'});
-      if(upsertError)throw upsertError;
-    }
-
-    if(removeRows.length){
-      const {error:deleteDefinitionsError}=await sb
-        .from('gift_definitions')
-        .delete()
-        .eq('user_id',userId)
-        .in('id',removeRows.map(row=>row.id));
-      if(deleteDefinitionsError)throw deleteDefinitionsError;
-    }
-  }
-
-  // 公式ギフトの分類を最新定義に合わせる
+  // 公式ギフトの分類を更新する
   const {data:officialRows,error:officialError}=await sb
     .from('gift_definitions')
     .select('id,name,coin,group_name,mascot,variant')
     .eq('user_id',userId)
     .eq('source','official');
+
   if(officialError)throw officialError;
 
-  const officialMap=new Map(OFFICIAL_GIFTS.map(g=>[`${g.name}|${g.coin}`,g]));
+  const officialMap=new Map(
+    OFFICIAL_GIFTS.map(g=>[
+      `${g.name}|${g.coin}`,
+      g
+    ])
+  );
+
   for(const row of officialRows||[]){
-    const definition=officialMap.get(`${row.name}|${row.coin}`);
+    const definition=officialMap.get(
+      `${row.name}|${row.coin}`
+    );
+
     if(!definition)continue;
 
     const newGroup=definition.group||null;
     const newMascot=definition.mascot||null;
     const newVariant=definition.variant||null;
-    if(row.group_name===newGroup&&row.mascot===newMascot&&row.variant===newVariant)continue;
 
-    const {error}=await sb.from('gift_definitions').update({
-      group_name:newGroup,
-      mascot:newMascot,
-      variant:newVariant
-    }).eq('id',row.id).eq('user_id',userId);
+    if(
+      row.group_name===newGroup&&
+      row.mascot===newMascot&&
+      row.variant===newVariant
+    )continue;
+
+    const {error}=await sb
+      .from('gift_definitions')
+      .update({
+        group_name:newGroup,
+        mascot:newMascot,
+        variant:newVariant
+      })
+      .eq('id',row.id)
+      .eq('user_id',userId);
+
     if(error)throw error;
   }
 }
+
 
 let loadPromise=null;
 
@@ -596,7 +619,7 @@ async function load(){
       sb
         .from('gift_counts')
         .select('*')
-        .eq('user_id',state.appUserId),
+        .eq('user_id',state.user.id),
 
       sb
         .from('endurance_item_counts')
@@ -1161,6 +1184,10 @@ function gift(){
   const overall=
     giftTypeSummary(allSelected);
 
+  if(state.giftViewMode==='collect'){
+    return giftCollectionPage();
+  }
+
   return `
     <div class="card">
 
@@ -1171,13 +1198,10 @@ function gift(){
             1回でも受け取ったギフトは達成済みになります。
           </p>
         </div>
-
-        <button
-          class="secondary"
-          id="eventSettings"
-        >
-          イベント設定
-        </button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="secondary" id="showGiftCollection">ギフト集め ▾</button>
+          <button class="secondary" id="eventSettings">イベント設定</button>
+        </div>
       </div>
 
       <div class="row" style="margin:10px 0 8px;align-items:center;justify-content:space-between">
@@ -1223,6 +1247,65 @@ function gift(){
 
     </div>
   `;
+}
+
+function collectionStorageKey(){
+  return `avvyGiftCollection:${state.appUserId||'local'}`;
+}
+function getGiftCollectionGoals(){
+  try{return JSON.parse(localStorage.getItem(collectionStorageKey())||'[]')}catch(e){return []}
+}
+function saveGiftCollectionGoals(goals){
+  localStorage.setItem(collectionStorageKey(),JSON.stringify(goals));
+}
+function giftCollectionPage(){
+  const goals=getGiftCollectionGoals();
+  const enabled=state.gifts.filter(g=>g.source!=='origift');
+  const mascotNames=[...new Set(enabled.map(g=>g.mascot).filter(Boolean))];
+  const rows=goals.map((goal,index)=>{
+    let current=0;
+    if(goal.type==='mascot'){
+      current=enabled.filter(g=>g.mascot===goal.mascot).reduce((sum,g)=>sum+Number(state.giftCounts[g.id]||0),0);
+    }else if(goal.type==='multi'){
+      current=(goal.giftIds||[]).reduce((sum,id)=>sum+Number(state.giftCounts[id]||0),0);
+    }else current=Number(state.giftCounts[goal.giftId]||0);
+    const target=Math.max(1,Number(goal.target)||1);
+    const pct=Math.min(100,current/target*100);
+    return `<div class="card" style="margin:10px 0;padding:14px">
+      <div class="section-head"><div><strong>${esc(goal.label)}</strong><p class="top-note">${goal.type==='mascot'?'該当ケモずのギフトを種類問わず合算':goal.type==='multi'?'選択したギフトの合計':'指定ギフトのみ'}</p></div><button class="danger small-btn" data-remove-collection-goal="${index}">削除</button></div>
+      <div style="display:flex;justify-content:space-between;gap:8px;margin:10px 0"><strong>${current} / ${target} 個</strong><span class="pill">${current>=target?'達成！':`${Math.round(pct)}%`}</span></div>
+      <div style="height:8px;background:var(--line,#eee);border-radius:99px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--accent,#e98f8f);border-radius:99px"></div></div>
+    </div>`;
+  }).join('');
+  const giftOptions=enabled.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}（${Number(g.coin)}C）</option>`).join('');
+  const mascotOptions=mascotNames.map(m=>`<option value="${esc(m)}">${esc(m)}</option>`).join('');
+  return `<div class="card">
+    <div class="section-head"><div><h2>🎯 ギフト集め</h2><p class="top-note">特定ギフト・複数ギフト・ケモず単位で目標を設定できます。</p></div><button class="secondary" id="showAllGiftEndurance">全ギフト耐久 ▾</button></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0"><button class="primary" id="addGiftCollectionGoal">＋ 目標を追加</button><button class="secondary" id="resetGiftCollectionGoals">目標をすべて削除</button></div>
+    ${rows||'<div class="empty">まだ目標がありません。「目標を追加」から設定できます。</div>'}
+    <p class="top-note" style="margin-top:12px">目標設定はこのブラウザに保存されます。受け取り数は既存のギフトカウントを利用します。</p>
+  </div>`;
+}
+function addGiftCollectionGoal(){
+  const gifts=state.gifts.filter(g=>g.source!=='origift');
+  if(!gifts.length){toast('ギフトデータがありません');return;}
+  const m=modal(`<div class="section-head"><h2>🎯 集める目標を追加</h2><button class="iconbtn" id="closeCollectionModal">×</button></div>
+    <div class="form"><label>集め方</label><select id="collectionType"><option value="gift">特定のギフト</option><option value="multi">複数のギフトを合算</option><option value="mascot">ケモずを集める（種類問わず合算）</option></select>
+    <div id="collectionGiftFields"><label>ギフト</label><select id="collectionGift">${gifts.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}（${Number(g.coin)}C）</option>`).join('')}</select></div>
+    <div id="collectionMultiFields" style="display:none"><label>集めるギフト（複数選択可）</label><select id="collectionGifts" multiple size="8">${gifts.map(g=>`<option value="${esc(g.id)}">${esc(g.name)}（${Number(g.coin)}C）</option>`).join('')}</select><p class="top-note">Ctrlキー（MacはCommandキー）を押しながら複数選択できます。</p></div>
+    <div id="collectionMascotFields" style="display:none"><label>ケモず</label><select id="collectionMascot">${[...new Set(gifts.map(g=>g.mascot).filter(Boolean))].map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}</select></div>
+    <label>目標個数</label><input id="collectionTarget" type="number" min="1" value="10"><button class="primary" id="saveCollectionGoal">目標を追加</button></div>`);
+  const type=m.querySelector('#collectionType');
+  const update=()=>{const v=type.value;m.querySelector('#collectionGiftFields').style.display=v==='gift'?'':'none';m.querySelector('#collectionMultiFields').style.display=v==='multi'?'':'none';m.querySelector('#collectionMascotFields').style.display=v==='mascot'?'':'none';};
+  type.addEventListener('change',update);
+  m.querySelector('#closeCollectionModal').onclick=()=>m.remove();
+  m.querySelector('#saveCollectionGoal').onclick=()=>{
+    const v=type.value;const target=Math.max(1,Number(m.querySelector('#collectionTarget').value)||1);let goal;
+    if(v==='gift'){const id=m.querySelector('#collectionGift').value;const g=gifts.find(x=>x.id===id);goal={type:'gift',giftId:id,label:g?.name||'ギフト',target};}
+    else if(v==='multi'){const ids=[...m.querySelector('#collectionGifts').selectedOptions].map(o=>o.value);if(!ids.length){toast('ギフトを1つ以上選んでください');return;}goal={type:'multi',giftIds:ids,label:ids.map(id=>gifts.find(g=>g.id===id)?.name).filter(Boolean).join('＋'),target};}
+    else{const mascot=m.querySelector('#collectionMascot').value;goal={type:'mascot',mascot,label:`${mascot}集め`,target};}
+    const goals=getGiftCollectionGoals();goals.push(goal);saveGiftCollectionGoals(goals);m.remove();render();
+  };
 }
 
 function giftSeasonGroup(){
@@ -1845,7 +1928,7 @@ async function resetAllGifts(){
   const {error}=await sb
     .from('gift_counts')
     .delete()
-    .eq('user_id',state.appUserId);
+    .eq('user_id',state.user.id);
 
   if(error){
     toast('一括リセットに失敗しました：'+error.message);
@@ -1872,7 +1955,7 @@ function resetEvent(event){
   sb
     .from('gift_counts')
     .delete()
-    .eq('user_id',state.appUserId)
+    .eq('user_id',state.user.id)
     .in('gift_id',ids)
     .then(
       ({error})=>{
@@ -2994,7 +3077,7 @@ async function incrementGift(id){
       .from('gift_counts')
       .upsert(
         {
-          user_id:state.appUserId,
+          user_id:state.user.id,
           gift_id:id,
           count:next,
           updated_at:new Date().toISOString()
@@ -3019,11 +3102,11 @@ async function decrementGift(id){
   if(current<=0){toast('カウントは0未満にできません');return;}
   const next=current-1;
   if(next===0){
-    const {error}=await sb.from('gift_counts').delete().eq('user_id',state.appUserId).eq('gift_id',id);
+    const {error}=await sb.from('gift_counts').delete().eq('user_id',state.user.id).eq('gift_id',id);
     if(error){toast('カウントを減らせませんでした：'+error.message);return;}
     delete state.giftCounts[id];
   }else{
-    const {error}=await sb.from('gift_counts').upsert({user_id:state.appUserId,gift_id:id,count:next,updated_at:new Date().toISOString()},{onConflict:'user_id,gift_id'});
+    const {error}=await sb.from('gift_counts').upsert({user_id:state.user.id,gift_id:id,count:next,updated_at:new Date().toISOString()},{onConflict:'user_id,gift_id'});
     if(error){toast('カウントを減らせませんでした：'+error.message);return;}
     state.giftCounts[id]=next;
   }
@@ -3036,7 +3119,7 @@ async function resetSingleGift(id){
   const gift=state.gifts.find(g=>String(g.id)===String(id));
   if(!gift||gift.source!=='season')return;
   if(!confirm(`「${gift.name}」のカウントを0に戻しますか？`))return;
-  const {error}=await sb.from('gift_counts').delete().eq('user_id',state.appUserId).eq('gift_id',id);
+  const {error}=await sb.from('gift_counts').delete().eq('user_id',state.user.id).eq('gift_id',id);
   if(error){toast('個別リセットに失敗しました：'+error.message);return;}
   delete state.giftCounts[id];
   render();
@@ -3062,7 +3145,7 @@ async function resetCoin(
     await sb
       .from('gift_counts')
       .delete()
-      .eq('user_id',state.appUserId)
+      .eq('user_id',state.user.id)
       .in('gift_id',ids);
 
   if(error){
@@ -4272,6 +4355,11 @@ function bind(){
     'click',
     eventSettingsModal
   );
+  $('#showGiftCollection')?.addEventListener('click',()=>{state.giftViewMode='collect';render();});
+  $('#showAllGiftEndurance')?.addEventListener('click',()=>{state.giftViewMode='all';render();});
+  $('#addGiftCollectionGoal')?.addEventListener('click',addGiftCollectionGoal);
+  $('#resetGiftCollectionGoals')?.addEventListener('click',()=>{if(confirm('ギフト集めの目標をすべて削除しますか？')){saveGiftCollectionGoals([]);render();}});
+  document.querySelectorAll('[data-remove-collection-goal]').forEach(b=>b.addEventListener('click',()=>{const goals=getGiftCollectionGoals();goals.splice(Number(b.dataset.removeCollectionGoal),1);saveGiftCollectionGoals(goals);render();}));
 
   $('#resetAllGifts')?.addEventListener('click',resetAllGifts);
   $('#toggleSeasonGiftEndurance')?.addEventListener('click',toggleSeasonGiftEndurance);
@@ -4358,7 +4446,7 @@ function bind(){
           .delete()
           .eq(
             'user_id',
-            state.appUserId
+            state.user.id
           )
           .in(
             'gift_id',
