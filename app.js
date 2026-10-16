@@ -43,16 +43,6 @@ const ZODIAC=[
   'いて座','やぎ座','みずがめ座','うお座'
 ];
 
-
-// Bundled official gift artwork (preloaded for every user)
-const BUNDLED_GIFT_IMAGES = {"チャーハン":"assets/gifts/イベント/チャーハン.JPG","パンダまん":"assets/gifts/イベント/パンダまん.jpg","フライドポテト":"assets/gifts/イベント/フライドポテト.jpg","線香花火":"assets/gifts/イベント/線香花火.jpg","福":"assets/gifts/イベント/福.JPG","死神":"assets/gifts/イベント/死神.jpg","コーラ":"assets/gifts/イベント/コーラ.jpg","lol(ネオン)":"assets/gifts/イベント/LOL(ネオン).jpg","cool":"assets/gifts/イベント/Cool.jpg","金魚":"assets/gifts/イベント/金魚.jpg","ドンッ!":"assets/gifts/イベント/ドンッ！.jpg","エナジードリンク(ネオン)":"assets/gifts/イベント/エナジードリンク(ネオン).jpg","ハート(ネオン)":"assets/gifts/イベント/ハート(ネオン).jpg","ストロベリーシェイク":"assets/gifts/イベント/ストロベリーシェイク.jpg","ロリポップ":"assets/gifts/イベント/ロリポップ.jpg","風車":"assets/gifts/イベント/風車.JPG","ゴースト":"assets/gifts/イベント/ゴースト.jpg","黒猫":"assets/gifts/イベント/黒猫.jpg","フルーツキャンディ":"assets/gifts/イベント/フルーツキャンディ.JPG","let's go!":"assets/gifts/イベント/Let's Go！.jpg","ソーダ":"assets/gifts/イベント/ソーダ.jpg","扇":"assets/gifts/イベント/扇.jpg","音符(ネオン)":"assets/gifts/イベント/音符(ネオン).jpg","フルーツペンライト":"assets/gifts/イベント/フルーツペンライト.jpg","麻雀牌":"assets/gifts/イベント/麻雀牌.jpg","フルーツポンチ":"assets/gifts/イベント/フルーツポンチ.JPG","アイスキャンディー":"assets/gifts/イベント/アイスキャンディー.jpg","ラムネ":"assets/gifts/イベント/ラムネ.jpg","コウモリ":"assets/gifts/イベント/コウモリ.JPG","レコード":"assets/gifts/イベント/レコード.jpg","アイスクリーム":"assets/gifts/通常/アイスクリーム.jpg","キラキラ":"assets/gifts/通常/キラキラ.JPG","100本のバラ":"assets/gifts/通常/100本のバラ.JPG","ドドド":"assets/gifts/通常/ドドド.jpg","お茶":"assets/gifts/通常/お茶.jpg","ミニケーキ":"assets/gifts/通常/ミニケーキ.jpg","乾杯":"assets/gifts/通常/乾杯.jpg","ハートラッシュ!":"assets/gifts/通常/ハートラッシュ！.jpg","ハート風船":"assets/gifts/通常/ハート風船.jpg","ペンライト振り":"assets/gifts/通常/ペンライト振り.jpg","尊い":"assets/gifts/通常/尊い.jpg","ビックハートクッション":"assets/gifts/通常/ビックハートクッション.jpg","レインボーステージ":"assets/gifts/通常/レインボーステージ.jpg","花火セレナーデ":"assets/gifts/通常/花火セレナーデ.jpg","集中線":"assets/gifts/通常/集中線.jpg","ハロウィンナイト":"assets/gifts/通常/ハロウィンナイト.jpg","ケモずファンファーレ":"assets/gifts/通常/ケモずファンファーレ.jpg","たしカニ":"assets/gifts/通常/文字/たしカニ.jpg","うんうん":"assets/gifts/通常/文字/うんうん.jpg","最高":"assets/gifts/通常/文字/最高.jpg","god":"assets/gifts/通常/文字/GOD.jpg","?":"assets/gifts/通常/文字/？.jpg","notok":"assets/gifts/通常/文字/NOTOK.jpg","img_e3767":"assets/gifts/通常/文字/IMG_E3767.JPG","笑":"assets/gifts/通常/文字/笑.jpg","かわいい(青)":"assets/gifts/通常/文字/かわいい(青).jpg","わかりみ":"assets/gifts/通常/文字/わかりみ.jpg","ええやん":"assets/gifts/通常/文字/ええやん.jpg","すやぴっぴ":"assets/gifts/通常/文字/すやぴっぴ.jpg","天才かよ":"assets/gifts/通常/文字/天才かよ.jpg","ww":"assets/gifts/通常/文字/ww.JPG","草":"assets/gifts/通常/文字/草.jpg","うれピーナッツ":"assets/gifts/通常/文字/うれピーナッツ.jpg","さすが":"assets/gifts/通常/文字/さすが.jpg","!?":"assets/gifts/通常/文字/！？.jpg","かわいい(ピンク)":"assets/gifts/通常/文字/かわいい(ピンク).jpg","祝":"assets/gifts/通常/文字/祝.jpg","神回":"assets/gifts/通常/文字/神回.jpg","えっ?":"assets/gifts/通常/文字/えっ？.jpg","ok":"assets/gifts/通常/文字/OK.jpg","バラ":"assets/gifts/通常/アイテム/バラ.jpg","花束":"assets/gifts/通常/アイテム/花束.jpg","クリームソーダ":"assets/gifts/通常/アイテム/クリームソーダ.jpg","プレゼントボックス":"assets/gifts/通常/アイテム/プレゼントボックス.jpg","ペンライト(3本)":"assets/gifts/通常/アイテム/ペンライト(3本).jpg","おめでとう":"assets/gifts/通常/アイテム/おめでとう.jpg","音符":"assets/gifts/通常/アイテム/音符.jpg","つぼみのバラ":"assets/gifts/通常/アイテム/つぼみのバラ.jpg","ペンライト":"assets/gifts/通常/アイテム/ペンライト.jpg","ハート":"assets/gifts/通常/アイテム/ハート.jpg","照れ照れ":"assets/gifts/通常/Avvyケモず/照れ照れ.jpg","おはよう!":"assets/gifts/通常/Avvyケモず/おはよう！.jpg","もぐもぐ":"assets/gifts/通常/Avvyケモず/もぐもぐ.jpg","ごろ寝":"assets/gifts/通常/Avvyケモず/ごろ寝.jpg","お大事に":"assets/gifts/通常/Avvyケモず/お大事に.jpg","またね":"assets/gifts/通常/Avvyケモず/またね.jpg","いいね(ヨルワール)":"assets/gifts/通常/Avvyケモず/いいね(ヨルワール).jpg","おやすみ":"assets/gifts/通常/Avvyケモず/おやすみ.jpg","溶けちゃう":"assets/gifts/通常/Avvyケモず/溶けちゃう.jpg","がんばれ":"assets/gifts/通常/Avvyケモず/がんばれ.jpg","乙":"assets/gifts/通常/Avvyケモず/乙.jpg","いいね(でんきゅいぬ)":"assets/gifts/通常/Avvyケモず/いいね(でんきゅいぬ).jpg","しょぼぼーん":"assets/gifts/通常/Avvyケモず/しょぼぼーん.jpg","メラメラ":"assets/gifts/通常/Avvyケモず/メラメラ.jpg","ただいま~":"assets/gifts/通常/Avvyケモず/ただいま～.jpg","パチパチ":"assets/gifts/通常/Avvyケモず/パチパチ.jpg","たましい":"assets/gifts/通常/Avvyケモず/たましい.jpg","チルい":"assets/gifts/通常/Avvyケモず/チルい.jpg","たすかる":"assets/gifts/通常/Avvyケモず/たすかる.jpg","ありがとう":"assets/gifts/通常/Avvyケモず/ありがとう.jpg","おかえり":"assets/gifts/通常/Avvyケモず/おかえり.jpg","big thanks":"assets/gifts/通常/Avvyケモず/Big Thanks.jpg","心配":"assets/gifts/通常/Avvyケモず/心配.jpg","おなかすいた":"assets/gifts/通常/Avvyケモず/おなかすいた.jpg","わかる":"assets/gifts/通常/Avvyケモず/わかる.jpg","ショック!":"assets/gifts/通常/Avvyケモず/ショック！.jpg","充電中":"assets/gifts/通常/Avvyケモず/充電中.jpg","嬉しい!":"assets/gifts/通常/Avvyケモず/嬉しい！.jpg","かまって":"assets/gifts/通常/Avvyケモず/かまって.jpg","カチコチ":"assets/gifts/通常/Avvyケモず/カチコチ.jpg","推し":"assets/gifts/通常/Avvyケモず/推し.jpg","ごゆっくり":"assets/gifts/通常/Avvyケモず/ごゆっくり.jpg"};
-function bundledGiftImage(g){
-  const norm=s=>String(s||'').normalize('NFKC').replace(/[♡♥]/g,'').replace(/\s+/g,'').toLowerCase();
-  const candidates=[g.name, g.name.replace(/\([^)]*\)$/,''), g.name.replace(/♡/g,''), g.name.replace(/\s*NOT\s*OK/i,'NOTOK')];
-  for(const name of candidates){ const key=norm(name); for(const [k,path] of Object.entries(BUNDLED_GIFT_IMAGES)){ if(norm(k)===key) return path.split('/').map(encodeURIComponent).join('/'); } }
-  return '';
-}
-
 const OFFICIAL_GIFTS=[
   // 5C：文字系
   {name:'ええやん',coin:5,group:'文字系'},
@@ -203,7 +193,7 @@ const EVENT_GIFTS={
   'ハロウィンナイト':[
     {name:'ゴースト',coin:5},
     {name:'黒猫',coin:5},
-    {name:'ガイコツ',coin:5},
+    {name:'死神',coin:5},
     {name:'コウモリ',coin:5},
     {name:'ロリポップ',coin:50}
   ]
@@ -378,6 +368,18 @@ async function ensureOfficialGifts(userId){
     .eq('user_id',userId);
 
   if(existingError)throw existingError;
+
+  // 既存データに残っている旧ギフト名「ガイコツ」を「死神」に移行する。
+  // gift_definitions の同じ行を更新するため、既存のカウント紐付けは維持される。
+  const {error:renameShinigamiError}=await sb
+    .from('gift_definitions')
+    .update({name:'死神'})
+    .eq('user_id',userId)
+    .eq('source','event')
+    .eq('event_key','ハロウィンナイト')
+    .eq('name','ガイコツ');
+
+  if(renameShinigamiError)throw renameShinigamiError;
 
   const existingOfficial=(existingAll||[]).filter(
     g=>g.source==='official'
@@ -649,7 +651,7 @@ async function load(){
       sb
         .from('gift_event_settings')
         .select('*')
-        .eq('user_id',state.appUserId),
+        .eq('user_id',state.user.id),
 
       sb
         .from('gift_event_gift_settings')
@@ -1532,6 +1534,46 @@ function giftOfficialGroup(coin){
   `;
 }
 
+// Bundled gift images. Official gifts work immediately after deployment; users can still override images locally.
+const BUNDLED_GIFT_IMAGES = {"normal":{"100本のバラ":"assets/gifts/%E9%80%9A%E5%B8%B8/100%E6%9C%AC%E3%81%AE%E3%83%90%E3%83%A9.JPG","Big Thanks":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/Big%20Thanks.jpg","ありがとう":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%82%E3%82%8A%E3%81%8C%E3%81%A8%E3%81%86.jpg","いいね(でんきゅいぬ)":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%84%E3%81%84%E3%81%AD(%E3%81%A7%E3%82%93%E3%81%8D%E3%82%85%E3%81%84%E3%81%AC).jpg","いいね(ヨルワール)":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%84%E3%81%84%E3%81%AD(%E3%83%A8%E3%83%AB%E3%83%AF%E3%83%BC%E3%83%AB).jpg","おかえり":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%8A%E3%81%8B%E3%81%88%E3%82%8A.jpg","おなかすいた":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%8A%E3%81%AA%E3%81%8B%E3%81%99%E3%81%84%E3%81%9F.jpg","おはよう！":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%8A%E3%81%AF%E3%82%88%E3%81%86%EF%BC%81.jpg","おやすみ":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%8A%E3%82%84%E3%81%99%E3%81%BF.jpg","お大事に":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%8A%E5%A4%A7%E4%BA%8B%E3%81%AB.jpg","かまって":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%8B%E3%81%BE%E3%81%A3%E3%81%A6.jpg","がんばれ":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%8C%E3%82%93%E3%81%B0%E3%82%8C.jpg","ごゆっくり":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%94%E3%82%86%E3%81%A3%E3%81%8F%E3%82%8A.jpg","ごろ寝":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%94%E3%82%8D%E5%AF%9D.jpg","しょぼぼーん":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%97%E3%82%87%E3%81%BC%E3%81%BC%E3%83%BC%E3%82%93.jpg","たすかる":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%9F%E3%81%99%E3%81%8B%E3%82%8B.jpg","ただいま～":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%9F%E3%81%A0%E3%81%84%E3%81%BE%EF%BD%9E.jpg","たましい":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%9F%E3%81%BE%E3%81%97%E3%81%84.jpg","またね":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%81%BE%E3%81%9F%E3%81%AD.jpg","もぐもぐ":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%82%82%E3%81%90%E3%82%82%E3%81%90.jpg","わかる":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%82%8F%E3%81%8B%E3%82%8B.jpg","カチコチ":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%82%AB%E3%83%81%E3%82%B3%E3%83%81.jpg","ショック！":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%82%B7%E3%83%A7%E3%83%83%E3%82%AF%EF%BC%81.jpg","チルい":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%83%81%E3%83%AB%E3%81%84.jpg","パチパチ":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%83%91%E3%83%81%E3%83%91%E3%83%81.jpg","メラメラ":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E3%83%A1%E3%83%A9%E3%83%A1%E3%83%A9.jpg","乙":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E4%B9%99.jpg","充電中":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E5%85%85%E9%9B%BB%E4%B8%AD.jpg","嬉しい！":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E5%AC%89%E3%81%97%E3%81%84%EF%BC%81.jpg","心配":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E5%BF%83%E9%85%8D.jpg","推し":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E6%8E%A8%E3%81%97.jpg","溶けちゃう":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E6%BA%B6%E3%81%91%E3%81%A1%E3%82%83%E3%81%86.jpg","照れ照れ":"assets/gifts/%E9%80%9A%E5%B8%B8/Avvy%E3%82%B1%E3%83%A2%E3%81%9A/%E7%85%A7%E3%82%8C%E7%85%A7%E3%82%8C.jpg","お茶":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%81%8A%E8%8C%B6.jpg","アイスクリーム":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%A2%E3%82%A4%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%A0.jpg","おめでとう":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0/%E3%81%8A%E3%82%81%E3%81%A7%E3%81%A8%E3%81%86.jpg","つぼみのバラ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0/%E3%81%A4%E3%81%BC%E3%81%BF%E3%81%AE%E3%83%90%E3%83%A9.jpg","クリームソーダ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0/%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%A0%E3%82%BD%E3%83%BC%E3%83%80.jpg","ハート":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0/%E3%83%8F%E3%83%BC%E3%83%88.jpg","バラ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0/%E3%83%90%E3%83%A9.jpg","プレゼントボックス":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0/%E3%83%97%E3%83%AC%E3%82%BC%E3%83%B3%E3%83%88%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9.jpg","ペンライト(3本)":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0/%E3%83%9A%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%88(3%E6%9C%AC).jpg","ペンライト":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0/%E3%83%9A%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%88.jpg","花束":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0/%E8%8A%B1%E6%9D%9F.jpg","音符":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%A2%E3%82%A4%E3%83%86%E3%83%A0/%E9%9F%B3%E7%AC%A6.jpg","キラキラ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%AD%E3%83%A9%E3%82%AD%E3%83%A9.JPG","ケモずファンファーレ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%82%B1%E3%83%A2%E3%81%9A%E3%83%95%E3%82%A1%E3%83%B3%E3%83%95%E3%82%A1%E3%83%BC%E3%83%AC.jpg","ドドド":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%83%89%E3%83%89%E3%83%89.jpg","ハロウィンナイト":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%83%8F%E3%83%AD%E3%82%A6%E3%82%A3%E3%83%B3%E3%83%8A%E3%82%A4%E3%83%88.jpg","ハートラッシュ！":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%83%8F%E3%83%BC%E3%83%88%E3%83%A9%E3%83%83%E3%82%B7%E3%83%A5%EF%BC%81.jpg","ハート風船":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%83%8F%E3%83%BC%E3%83%88%E9%A2%A8%E8%88%B9.jpg","ビックハートクッション":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%83%93%E3%83%83%E3%82%AF%E3%83%8F%E3%83%BC%E3%83%88%E3%82%AF%E3%83%83%E3%82%B7%E3%83%A7%E3%83%B3.jpg","ペンライト振り":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%83%9A%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%88%E6%8C%AF%E3%82%8A.jpg","ミニケーキ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%83%9F%E3%83%8B%E3%82%B1%E3%83%BC%E3%82%AD.jpg","レインボーステージ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E3%83%AC%E3%82%A4%E3%83%B3%E3%83%9C%E3%83%BC%E3%82%B9%E3%83%86%E3%83%BC%E3%82%B8.jpg","乾杯":"assets/gifts/%E9%80%9A%E5%B8%B8/%E4%B9%BE%E6%9D%AF.jpg","尊い":"assets/gifts/%E9%80%9A%E5%B8%B8/%E5%B0%8A%E3%81%84.jpg","GOD":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/GOD.jpg","IMG_E3767":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/IMG_E3767.JPG","NOTOK":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/NOTOK.jpg","OK":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/OK.jpg","ww":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/ww.JPG","うれピーナッツ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E3%81%86%E3%82%8C%E3%83%94%E3%83%BC%E3%83%8A%E3%83%83%E3%83%84.jpg","うんうん":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E3%81%86%E3%82%93%E3%81%86%E3%82%93.jpg","ええやん":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E3%81%88%E3%81%88%E3%82%84%E3%82%93.jpg","えっ？":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E3%81%88%E3%81%A3%EF%BC%9F.jpg","かわいい(ピンク)":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E3%81%8B%E3%82%8F%E3%81%84%E3%81%84(%E3%83%94%E3%83%B3%E3%82%AF).jpg","かわいい(青)":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E3%81%8B%E3%82%8F%E3%81%84%E3%81%84(%E9%9D%92).jpg","さすが":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E3%81%95%E3%81%99%E3%81%8C.jpg","すやぴっぴ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E3%81%99%E3%82%84%E3%81%B4%E3%81%A3%E3%81%B4.jpg","たしカニ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E3%81%9F%E3%81%97%E3%82%AB%E3%83%8B.jpg","わかりみ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E3%82%8F%E3%81%8B%E3%82%8A%E3%81%BF.jpg","天才かよ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E5%A4%A9%E6%89%8D%E3%81%8B%E3%82%88.jpg","最高":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E6%9C%80%E9%AB%98.jpg","祝":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E7%A5%9D.jpg","神回":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E7%A5%9E%E5%9B%9E.jpg","笑":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E7%AC%91.jpg","草":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%E8%8D%89.jpg","！？":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%EF%BC%81%EF%BC%9F.jpg","？":"assets/gifts/%E9%80%9A%E5%B8%B8/%E6%96%87%E5%AD%97/%EF%BC%9F.jpg","花火セレナーデ":"assets/gifts/%E9%80%9A%E5%B8%B8/%E8%8A%B1%E7%81%AB%E3%82%BB%E3%83%AC%E3%83%8A%E3%83%BC%E3%83%87.jpg","集中線":"assets/gifts/%E9%80%9A%E5%B8%B8/%E9%9B%86%E4%B8%AD%E7%B7%9A.jpg"},"event":{"Cool":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/Cool.jpg","Let's Go！":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/Let's%20Go%EF%BC%81.jpg","LOL(ネオン)":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/LOL(%E3%83%8D%E3%82%AA%E3%83%B3).jpg","アイスキャンディー":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%82%A2%E3%82%A4%E3%82%B9%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%87%E3%82%A3%E3%83%BC.jpg","エナジードリンク(ネオン)":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%82%A8%E3%83%8A%E3%82%B8%E3%83%BC%E3%83%89%E3%83%AA%E3%83%B3%E3%82%AF(%E3%83%8D%E3%82%AA%E3%83%B3).jpg","コウモリ":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%82%B3%E3%82%A6%E3%83%A2%E3%83%AA.JPG","コーラ":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%82%B3%E3%83%BC%E3%83%A9.jpg","ゴースト":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%82%B4%E3%83%BC%E3%82%B9%E3%83%88.jpg","ストロベリーシェイク":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%82%B9%E3%83%88%E3%83%AD%E3%83%99%E3%83%AA%E3%83%BC%E3%82%B7%E3%82%A7%E3%82%A4%E3%82%AF.jpg","ソーダ":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%82%BD%E3%83%BC%E3%83%80.jpg","チャーハン":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%83%81%E3%83%A3%E3%83%BC%E3%83%8F%E3%83%B3.JPG","ドンッ！":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%83%89%E3%83%B3%E3%83%83%EF%BC%81.jpg","ハート(ネオン)":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%83%8F%E3%83%BC%E3%83%88(%E3%83%8D%E3%82%AA%E3%83%B3).jpg","パンダまん":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%83%91%E3%83%B3%E3%83%80%E3%81%BE%E3%82%93.jpg","フライドポテト":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%83%95%E3%83%A9%E3%82%A4%E3%83%89%E3%83%9D%E3%83%86%E3%83%88.jpg","フルーツキャンディ":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%83%95%E3%83%AB%E3%83%BC%E3%83%84%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%87%E3%82%A3.JPG","フルーツペンライト":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%83%95%E3%83%AB%E3%83%BC%E3%83%84%E3%83%9A%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%88.jpg","フルーツポンチ":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%83%95%E3%83%AB%E3%83%BC%E3%83%84%E3%83%9D%E3%83%B3%E3%83%81.JPG","ラムネ":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%83%A9%E3%83%A0%E3%83%8D.jpg","レコード":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%83%AC%E3%82%B3%E3%83%BC%E3%83%89.jpg","ロリポップ":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E3%83%AD%E3%83%AA%E3%83%9D%E3%83%83%E3%83%97.jpg","扇":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E6%89%87.jpg","死神":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E6%AD%BB%E7%A5%9E.jpg","福":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E7%A6%8F.JPG","線香花火":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E7%B7%9A%E9%A6%99%E8%8A%B1%E7%81%AB.jpg","金魚":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E9%87%91%E9%AD%9A.jpg","音符(ネオン)":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E9%9F%B3%E7%AC%A6(%E3%83%8D%E3%82%AA%E3%83%B3).jpg","風車":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E9%A2%A8%E8%BB%8A.JPG","麻雀牌":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E9%BA%BB%E9%9B%80%E7%89%8C.jpg","黒猫":"assets/gifts/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88/%E9%BB%92%E7%8C%AB.jpg"}};
+function giftDisplayName(g){
+  if(g && g.variant==='blue' && g.name==='かわいい') return 'かわいい(青)';
+  if(g && g.variant==='pink' && g.name==='かわいい♡') return 'かわいい(ピンク)';
+  return String(g?.name ?? '');
+}
+function giftImageSrc(g){
+  const displayName=giftDisplayName(g);
+  const source=(g && g.source==='event') ? 'event' : 'normal';
+  const table=BUNDLED_GIFT_IMAGES[source]||{};
+  const rawName=String(g?.name ?? '');
+  // Keep exact mascot-specific files first, then fall back to the shared 5c mascot image.
+  const aliases={
+    'NOT OK':'NOTOK',
+    'ハートラッシュ！(クロル)':'ハートラッシュ！',
+    'ハートラッシュ(クロル)':'ハートラッシュ！',
+    'ビッグハートクッション':'ビックハートクッション'
+  };
+  const normalize=(value)=>String(value ?? '').normalize('NFKC').trim();
+  const candidates=[displayName,rawName,aliases[displayName],aliases[rawName]]
+    .filter(Boolean);
+  // The app uses full-width 「ｗｗ」 while the image is named 「ww.JPG」.
+  candidates.push(...candidates.map(normalize));
+  // Some 5c gifts include the mascot name in the app, while the shared image does not.
+  // Only remove known mascot suffixes as a fallback; exact character-specific files win first.
+  for(const candidate of [...candidates]){
+    const baseName=normalize(candidate).replace(/\s*\((?:アヴィエル|でんきゅいぬ|げるくま|ヨルワール|クロル|ウパめろ)\)\s*$/,'');
+    if(baseName && baseName!==candidate) candidates.push(baseName);
+  }
+  // NFKC also handles full-width/half-width variants. Compare keys normalized so case/width variants match.
+  for(const candidate of candidates){
+    if(Object.prototype.hasOwnProperty.call(table,candidate)) return table[candidate];
+    const normalized=normalize(candidate);
+    const matchedKey=Object.keys(table).find(key=>normalize(key)===normalized);
+    if(matchedKey) return table[matchedKey];
+  }
+  return '';
+}
+
 function mascotGroups(gs){
   const order=[
     'アヴィエル',
@@ -1570,9 +1612,9 @@ function giftButtons(gs){
         gs.map(
           g=>`
             <div class="gift-card ${Number(state.giftCounts[g.id]||0)>0?'is-achieved':'is-unachieved'}" style="display:flex;flex-direction:column;gap:8px;min-width:0">
-              <div class="gift-btn" style="width:100%" aria-label="${esc(g.name)}の現在のカウント">
-                ${bundledGiftImage(g) ? `<img class="bundled-gift-image" src="${bundledGiftImage(g)}" alt="${esc(g.name)}" loading="lazy" style="width:100%;max-width:112px;aspect-ratio:1;object-fit:contain;display:block;margin:0 auto 6px;border-radius:10px" />` : ''}
-                <strong>${esc(g.source==='season' ? `${g.name}（${Number(g.coin)}c）` : g.name)}</strong>
+              ${giftImageSrc(g) ? `<img class="gift-card-image" src="${giftImageSrc(g)}" alt="${esc(giftDisplayName(g))}" loading="lazy" onerror="this.style.display='none'">` : ''}
+              <div class="gift-btn" style="width:100%" aria-label="${esc(giftDisplayName(g))}の現在のカウント">
+                <strong>${esc(g.source==='season' ? `${giftDisplayName(g)}（${Number(g.coin)}c）` : giftDisplayName(g))}</strong>
                 <span>${Number(state.giftCounts[g.id]||0)}個</span>
               </div>
               <div class="gift-counter-controls" role="group" aria-label="${esc(g.name)}のカウント操作">
@@ -1791,7 +1833,7 @@ function eventSettingsModal(){
           .from('gift_event_settings')
           .upsert(
             {
-              user_id:state.appUserId,
+              user_id:state.user.id,
               event_key:e,
               enabled,
               updated_at:new Date().toISOString()
