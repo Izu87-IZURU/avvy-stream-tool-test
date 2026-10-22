@@ -1690,8 +1690,8 @@ function giftDisplayName(g){
     .trim();
 }
 function giftImageSrc(g){
-  // Release mode: built-in normal/event gifts intentionally show no bundled images.
-  // User-uploaded images for origift/custom features use their own image handlers and remain enabled.
+  // Release mode: do not show bundled normal/event/season gift images.
+  // User-uploaded images (origift/custom) use separate handlers and remain available.
   return '';
 }
 
@@ -1735,7 +1735,6 @@ function giftButtons(gs){
             <div class="gift-card ${Number(state.giftCounts[g.id]||0)>0?'is-achieved':'is-unachieved'}" style="display:flex;flex-direction:column;gap:8px;min-width:0">
               <span class="gift-status">${Number(state.giftCounts[g.id]||0)>0?'達成済み':'未達成'}</span>
               <strong class="gift-title" title="${esc(giftDisplayName(g))}">${esc(g.source==='season' ? `${giftDisplayName(g)}（${Number(g.coin)}c）` : giftDisplayName(g))}</strong>
-              ${giftImageSrc(g) ? `<img class="gift-card-image" src="${giftImageSrc(g)}" alt="${esc(giftDisplayName(g))}" loading="lazy" onerror="this.style.display='none'">` : ''}
               <div class="gift-count">${Number(state.giftCounts[g.id]||0)}個</div>
               <div class="gift-counter-controls" role="group" aria-label="${esc(giftDisplayName(g))}のカウント操作">
                 <button type="button" class="gift-counter-btn gift-counter-minus" data-gift-minus="${g.id}" ${Number(state.giftCounts[g.id]||0)<=0?'disabled':''} aria-label="${esc(giftDisplayName(g))}を1個減らす"><span aria-hidden="true">−</span><small>1</small></button>
