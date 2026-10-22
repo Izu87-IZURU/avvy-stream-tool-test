@@ -1780,13 +1780,24 @@ function giftButtons(gs){
 }
 
 function giftEventGroup(event){
-  const gs=
+  // 表示名の整形（括弧内のキャラクター名などを除去）によって
+  // 同じ名前に見えるイベントギフトも、画面上では1種類にまとめる。
+  // 既存のデータやカウントは削除せず、表示時のみ重複を除外する。
+  const eventRows=
     state.gifts.filter(
       g=>
         g.source==='event'&&
         g.event_key===event&&
         state.eventGiftSettings[g.id]!==false
     );
+
+  const seenDisplayKeys=new Set();
+  const gs=eventRows.filter(g=>{
+    const displayKey=`${String(giftDisplayName(g)||'').normalize('NFKC').trim().toLocaleLowerCase()}|${Number(g.coin)||0}`;
+    if(seenDisplayKeys.has(displayKey))return false;
+    seenDisplayKeys.add(displayKey);
+    return true;
+  });
 
   const coins=[
     ...new Set(
