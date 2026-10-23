@@ -1693,6 +1693,9 @@ function giftDisplayName(g){
     .trim();
 }
 function giftImageSrc(g){
+  // リリース版では通常・イベントギフトの標準画像を表示しない。
+  // オリギフ等のユーザー登録画像は別処理のため影響しない。
+  return '';
   const displayName=giftDisplayName(g);
   const source=(g && g.source==='event') ? 'event' : 'normal';
   const table=BUNDLED_GIFT_IMAGES[source]||{};
@@ -1780,9 +1783,8 @@ function giftButtons(gs){
 }
 
 function giftEventGroup(event){
-  // 表示名の整形（括弧内のキャラクター名などを除去）によって
-  // 同じ名前に見えるイベントギフトも、画面上では1種類にまとめる。
-  // 既存のデータやカウントは削除せず、表示時のみ重複を除外する。
+  // 表示名とコイン数が同じイベントギフトは、画面上で1種類だけ表示する。
+  // DBの定義やカウントは削除せず、表示時のみ重複を除外する。
   const eventRows=
     state.gifts.filter(
       g=>
