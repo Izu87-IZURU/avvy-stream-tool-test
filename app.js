@@ -245,7 +245,11 @@ const OFFICIAL_GIFTS=[
   {name:'レインボーステージ',coin:2000},
   {name:'花火セレナーデ',coin:2000},
 
-  {name:'100本のバラ',coin:5000}
+  {name:'オーロラ流星群',coin:3000},
+
+  {name:'100本のバラ',coin:5000},
+
+  {name:'No.1',coin:10000}
 ];
 
 const EVENT_GIFTS={
